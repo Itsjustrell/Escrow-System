@@ -9,6 +9,8 @@ use App\Services\EscrowTransitionService;
 use App\Enums\EscrowStatus;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\DisputeEvidence;
+use Illuminate\Support\Facades\Storage;
 
 class EscrowActionController extends Controller
 {
@@ -130,6 +132,22 @@ class EscrowActionController extends Controller
             auth()->id(),
             'Dispute resolved'
         );
+
+        return back();
+    }
+
+    public function uploadEvidence(Request $request, Escrow $escrow)
+    {
+        $request->validate([
+            'file' => 'required|file|max:2048'
+        ]);
+
+        $path = $request->file('file')->store('dispute_evidences');
+
+        DisputeEvidence::create([
+            'escrow_dispute_id' => $escrow->dispute->id,
+            'file_path' => $path,
+        ]);
 
         return back();
     }

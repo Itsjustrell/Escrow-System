@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EscrowActionController;
+use App\Http\Controllers\EscrowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,16 @@ Route::middleware('auth')->group(function () {
         [EscrowActionController::class, 'resolveDispute']
     )->middleware('escrow.state:disputed');
 });
+
+Route::middleware('auth')->get('/escrows', [EscrowController::class, 'index'])
+    ->name('escrows.index');
+
+Route::middleware('auth')->get('/escrows/{escrow}', [EscrowController::class, 'show'])
+    ->name('escrows.show');
+
+Route::post('/escrows/{escrow}/dispute/evidence',
+    [EscrowActionController::class, 'uploadEvidence']
+)->middleware(['auth', 'escrow.state:disputed']);
 
 // Auth routes (Breeze)
 require __DIR__.'/auth.php';
