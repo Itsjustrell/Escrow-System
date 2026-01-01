@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DisputeEvidence extends Model
 {
+    protected $table = 'dispute_evidences';
+    
     protected $fillable = [
         'escrow_dispute_id',
         'file_path',

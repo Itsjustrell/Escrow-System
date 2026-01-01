@@ -12,7 +12,7 @@ use App\Http\Controllers\EscrowActionController;
 */
 
 // Home
-Route::get('/', fn () => view('home'))->name('home');
+Route::get('/', fn() => view('home'))->name('home');
 
 // Authenticated
 Route::middleware('auth')->group(function () {
@@ -42,26 +42,36 @@ Route::middleware('auth')->group(function () {
     // ESCROW ACTIONS
     // ==================
 
-    Route::post('/escrows/{escrow}/fund',
+    Route::post(
+        '/escrows/{escrow}/fund',
         [EscrowActionController::class, 'fund']
     )->middleware('escrow.state:created');
 
-    Route::post('/escrows/{escrow}/ship',
+    Route::post(
+        '/escrows/{escrow}/ship',
         [EscrowActionController::class, 'ship']
     )->middleware('escrow.state:funded');
 
-    Route::post('/escrows/{escrow}/deliver',
+    Route::post(
+        '/escrows/{escrow}/deliver',
         [EscrowActionController::class, 'deliver']
     )->middleware('escrow.state:shipping');
 
-    Route::post('/escrows/{escrow}/release',
+    Route::post(
+        '/escrows/{escrow}/release',
         [EscrowActionController::class, 'release']
     )->middleware('escrow.state:delivered');
 
-    Route::post('/escrows/{escrow}/dispute',
+    Route::post(
+        '/escrows/{escrow}/dispute',
         [EscrowActionController::class, 'dispute']
     )->middleware('escrow.state:delivered');
+
+    Route::post(
+        '/escrows/{escrow}/dispute/evidence',
+        [EscrowActionController::class, 'uploadEvidence']
+    )->name('escrows.dispute.evidence');
 });
 
 // Auth (Breeze)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

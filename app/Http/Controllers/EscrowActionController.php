@@ -143,7 +143,10 @@ class EscrowActionController extends Controller
             'file' => 'required|file|max:2048'
         ]);
 
-        $path = $request->file('file')->store('dispute_evidences');
+        $path = $request->file('file')->store(
+            'dispute_evidences',
+            'public'
+        );
 
         DisputeEvidence::create([
             'escrow_dispute_id' => $escrow->dispute->id,
