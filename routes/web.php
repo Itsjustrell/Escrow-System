@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EscrowActionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -8,24 +10,42 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+// Home (public)
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::middleware('auth')->get('/dashboard', function () {
-    /** @var \App\Models\User $user */
-    $user = auth()->user();
+// Dashboard (role-based, via controller)
+Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
-    if ($user->hasRole('buyer')) {
-        return 'Buyer Dashboard';
-    }
+// Escrow actions (state-guarded)
+Route::middleware('auth')->group(function () {
 
-    if ($user->hasRole('seller')) {
-        return 'Seller Dashboard';
-    }
+    Route::post('/escrows/{escrow}/fund',
+        [EscrowActionController::class, 'fund']
+    )->middleware('escrow.state:created');
 
-    return abort(403);
+    Route::post('/escrows/{escrow}/ship',
+        [EscrowActionController::class, 'ship']
+    )->middleware('escrow.state:funded');
+
+    Route::post('/escrows/{escrow}/deliver',
+        [EscrowActionController::class, 'deliver']
+    )->middleware('escrow.state:shipping');
+
+    Route::post('/escrows/{escrow}/release',
+        [EscrowActionController::class, 'release']
+    )->middleware('escrow.state:delivered');
+
+    Route::post('/escrows/{escrow}/dispute',
+        [EscrowActionController::class, 'dispute']
+    )->middleware('escrow.state:delivered');
+
+    Route::post('/escrows/{escrow}/dispute/resolve',
+        [EscrowActionController::class, 'resolveDispute']
+    )->middleware('escrow.state:disputed');
 });
 
-
+// Auth routes (Breeze)
 require __DIR__.'/auth.php';
