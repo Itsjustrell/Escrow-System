@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Escrow;
 
 class DashboardController extends Controller
 {
@@ -11,11 +11,23 @@ class DashboardController extends Controller
         $user = auth()->user();
 
         if ($user->hasRole('buyer')) {
-            return view('dashboards.buyer');
+            $escrows = Escrow::where('created_by', $user->id)
+                ->latest()
+                ->paginate(5);
+
+            return view('dashboards.buyer', compact('escrows'));
         }
 
         if ($user->hasRole('seller')) {
-            return view('dashboards.seller');
+
+            $escrows = Escrow::whereHas('participants', function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                    ->where('role', 'seller');
+            })
+                ->latest()
+                ->paginate(5);
+
+            return view('dashboards.seller', compact('escrows'));
         }
 
         if ($user->hasRole('admin')) {
