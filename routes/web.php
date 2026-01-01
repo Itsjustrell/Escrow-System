@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EscrowActionController;
 use App\Http\Controllers\EscrowController;
+use App\Http\Controllers\EscrowActionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,17 +11,36 @@ use App\Http\Controllers\EscrowController;
 |--------------------------------------------------------------------------
 */
 
-// Home (public)
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+// Home
+Route::get('/', fn () => view('home'))->name('home');
 
-// Dashboard (role-based, via controller)
-Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');
-
-// Escrow actions (state-guarded)
+// Authenticated
 Route::middleware('auth')->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    // ==================
+    // ESCROW CRUD
+    // ==================
+
+    Route::get('/escrows', [EscrowController::class, 'index'])
+        ->name('escrows.index');
+
+    // ⚠️ STATIC HARUS DI ATAS PARAMETER
+    Route::get('/escrows/create', [EscrowController::class, 'create'])
+        ->name('escrows.create');
+
+    Route::post('/escrows', [EscrowController::class, 'store'])
+        ->name('escrows.store');
+
+    Route::get('/escrows/{escrow}', [EscrowController::class, 'show'])
+        ->name('escrows.show');
+
+    // ==================
+    // ESCROW ACTIONS
+    // ==================
 
     Route::post('/escrows/{escrow}/fund',
         [EscrowActionController::class, 'fund']
@@ -42,21 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/escrows/{escrow}/dispute',
         [EscrowActionController::class, 'dispute']
     )->middleware('escrow.state:delivered');
-
-    Route::post('/escrows/{escrow}/dispute/resolve',
-        [EscrowActionController::class, 'resolveDispute']
-    )->middleware('escrow.state:disputed');
 });
 
-Route::middleware('auth')->get('/escrows', [EscrowController::class, 'index'])
-    ->name('escrows.index');
-
-Route::middleware('auth')->get('/escrows/{escrow}', [EscrowController::class, 'show'])
-    ->name('escrows.show');
-
-Route::post('/escrows/{escrow}/dispute/evidence',
-    [EscrowActionController::class, 'uploadEvidence']
-)->middleware(['auth', 'escrow.state:disputed']);
-
-// Auth routes (Breeze)
+// Auth (Breeze)
 require __DIR__.'/auth.php';

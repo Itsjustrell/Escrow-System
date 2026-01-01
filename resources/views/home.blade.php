@@ -1,17 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Escrow System</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="p-10">
-    <h1 class="text-2xl font-bold">Transaction Escrow System</h1>
+@extends('layouts.app')
 
-    @auth
-        <a href="/dashboard">Dashboard</a>
-    @else
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-    @endauth
-</body>
-</html>
+@section('content')
+
+<h1>Transaction Escrow System</h1>
+
+<p>
+    A simulated escrow platform that ensures fair transactions between
+    buyers and sellers through a structured, state-based process.
+</p>
+
+<hr>
+
+<h3>How It Works</h3>
+<ol>
+    <li>Buyer creates an escrow</li>
+    <li>Funds are held by the system</li>
+    <li>Seller delivers goods/services</li>
+    <li>Funds are released after confirmation</li>
+</ol>
+
+<hr>
+
+@auth
+    <a href="{{ route('dashboard') }}">
+        <button>Go to Dashboard</button>
+    </a>
+@else
+    <a href="{{ route('login') }}">
+        <button>Login</button>
+    </a>
+
+    <a href="{{ route('register') }}">
+        <button>Register</button>
+    </a>
+@endauth
+
+@endsection

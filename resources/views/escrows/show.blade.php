@@ -1,59 +1,70 @@
-<h2>{{ $escrow->title }}</h2>
+@extends('layouts.app')
 
-<p>Amount: {{ $escrow->amount }}</p>
-<p>Status: {{ $escrow->status }}</p>
+@section('content')
+
+<h1>Escrow Detail</h1>
+
+<p><strong>Title:</strong> {{ $escrow->title }}</p>
+<p><strong>Amount:</strong> {{ number_format($escrow->amount, 2) }}</p>
+<p><strong>Status:</strong> {{ $escrow->status }}</p>
 
 <hr>
 
-{{-- BUYER ACTION --}}
+{{-- ========================= --}}
+{{-- BUYER ACTIONS --}}
+{{-- ========================= --}}
 @if(auth()->user()->hasRole('buyer'))
 
     @if($escrow->status === 'created')
         <form method="POST" action="/escrows/{{ $escrow->id }}/fund">
             @csrf
-            <button>Fund Escrow</button>
+            <button type="submit">Fund Escrow</button>
         </form>
     @endif
 
     @if($escrow->status === 'delivered')
         <form method="POST" action="/escrows/{{ $escrow->id }}/release">
             @csrf
-            <button>Release</button>
+            <button type="submit">Release Funds</button>
         </form>
+
+        <br>
 
         <form method="POST" action="/escrows/{{ $escrow->id }}/dispute">
             @csrf
-            <textarea name="reason" placeholder="Dispute reason"></textarea>
-            <button>Open Dispute</button>
+            <input type="text" name="reason" placeholder="Dispute reason" required>
+            <button type="submit">Open Dispute</button>
         </form>
+
+        <p>
+            <small>
+                Auto-release deadline:
+                {{ $escrow->confirm_deadline }}
+            </small>
+        </p>
     @endif
 
 @endif
 
-{{-- SELLER ACTION --}}
+{{-- ========================= --}}
+{{-- SELLER ACTIONS --}}
+{{-- ========================= --}}
 @if(auth()->user()->hasRole('seller'))
 
     @if($escrow->status === 'funded')
         <form method="POST" action="/escrows/{{ $escrow->id }}/ship">
             @csrf
-            <button>Ship</button>
+            <button type="submit">Mark as Shipped</button>
         </form>
     @endif
 
     @if($escrow->status === 'shipping')
         <form method="POST" action="/escrows/{{ $escrow->id }}/deliver">
             @csrf
-            <button>Mark Delivered</button>
+            <button type="submit">Mark as Delivered</button>
         </form>
     @endif
 
 @endif
 
-@if($escrow->status === 'disputed')
-<form method="POST" enctype="multipart/form-data"
-      action="/escrows/{{ $escrow->id }}/dispute/evidence">
-    @csrf
-    <input type="file" name="file">
-    <button>Upload Evidence</button>
-</form>
-@endif
+@endsection

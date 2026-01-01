@@ -1,3 +1,7 @@
+@extends('layouts.app')
+
+@section('content')
+
 <h1>Seller Dashboard</h1>
 
 <p>Welcome, {{ auth()->user()->name }}</p>
@@ -25,9 +29,7 @@
             <td>{{ $escrow->amount }}</td>
             <td>{{ $escrow->status }}</td>
             <td>
-                <a href="{{ route('escrows.show', $escrow) }}">
-                    View
-                </a>
+                <a href="{{ route('escrows.show', $escrow) }}">View</a>
             </td>
         </tr>
         @endforeach
@@ -40,3 +42,5 @@
 <hr>
 
 <a href="{{ route('escrows.index') }}">View All Escrows</a>
+
+@endsection

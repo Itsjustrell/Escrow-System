@@ -1,30 +1,36 @@
-<h2>Escrow List</h2>
+@extends('layouts.app')
 
-<form method="GET">
-    <input type="text" name="q" placeholder="Search title..." value="{{ request('q') }}">
-    <button type="submit">Search</button>
-</form>
+@section('content')
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
+<h1>Escrows</h1>
 
-    @foreach($escrows as $escrow)
-    <tr>
-        <td>{{ $escrow->id }}</td>
-        <td>{{ $escrow->title }}</td>
-        <td>{{ $escrow->amount }}</td>
-        <td>{{ $escrow->status }}</td>
-        <td>
-            <a href="{{ route('escrows.show', $escrow) }}">View</a>
-        </td>
-    </tr>
-    @endforeach
-</table>
+@if($escrows->count() === 0)
+    <p>No escrows found.</p>
+@else
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
 
-{{ $escrows->links() }}
+        @foreach($escrows as $escrow)
+        <tr>
+            <td>{{ $escrow->id }}</td>
+            <td>{{ $escrow->title }}</td>
+            <td>{{ $escrow->amount }}</td>
+            <td>{{ $escrow->status }}</td>
+            <td>
+                <a href="{{ route('escrows.show', $escrow) }}">View</a>
+            </td>
+        </tr>
+        @endforeach
+    </table>
+
+    <br>
+    {{ $escrows->links() }}
+@endif
+
+@endsection
