@@ -32,7 +32,14 @@ class EscrowActionController extends Controller
             'Funded by buyer'
         );
 
-        return back();
+        return request()->has('redirect_to') && request()->redirect_to === 'mobile_success' 
+            ? back()->with('success', 'Payment successful!') 
+            : back();
+    }
+
+    public function paymentView(Escrow $escrow)
+    {
+        return view('escrows.payment', compact('escrow'));
     }
 
     public function ship(Escrow $escrow)

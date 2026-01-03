@@ -47,6 +47,11 @@ Route::middleware('auth')->group(function () {
         [EscrowActionController::class, 'fund']
     )->middleware('escrow.state:created');
 
+    Route::get(
+        '/escrows/{escrow}/pay',
+        [EscrowActionController::class, 'paymentView']
+    )->name('escrows.pay');
+
     Route::post(
         '/escrows/{escrow}/ship',
         [EscrowActionController::class, 'ship']
