@@ -13,7 +13,7 @@ class DashboardController extends Controller
         if ($user->hasRole('buyer')) {
             $escrows = Escrow::where('created_by', $user->id)
                 ->latest()
-                ->paginate(5);
+                ->get();
 
             return view('dashboards.buyer', compact('escrows'));
         }
@@ -25,7 +25,7 @@ class DashboardController extends Controller
                     ->where('role', 'seller');
             })
                 ->latest()
-                ->paginate(5);
+                ->get();
 
             return view('dashboards.seller', compact('escrows'));
         }

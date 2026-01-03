@@ -147,7 +147,7 @@ class EscrowActionController extends Controller
     public function uploadEvidence(Request $request, Escrow $escrow)
     {
         $request->validate([
-            'file' => 'required|file|max:2048'
+            'file' => 'required|file|max:10240'
         ]);
 
         $path = $request->file('file')->store(

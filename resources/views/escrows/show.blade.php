@@ -442,8 +442,32 @@
                         <form method="POST" action="{{ route('escrows.dispute.evidence', $escrow) }}" enctype="multipart/form-data">
                             @csrf
                             <input type="file" name="file" style="margin-bottom: 10px; width: 100%;">
+                            @error('file')
+                                <div style="color: #ef4444; font-size: 0.85rem; margin-bottom: 10px;">{{ $message }}</div>
+                            @enderror
                             <button type="submit" class="btn-action-primary" style="background: #e11d48;">Upload File</button>
                         </form>
+                    @endif
+
+                    <h4 style="margin: 20px 0 10px; color: #881337;">Submitted Evidence</h4>
+                    @if($escrow->dispute->evidences->count() > 0)
+                        <div style="max-height: 250px; overflow-y: auto; padding-right: 5px; border: 1px solid #f1f5f9; border-radius: 8px; padding: 10px; background: #fff1f2;">
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                @foreach($escrow->dispute->evidences as $evidence)
+                                    <li style="background: white; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #fecdd3; display: flex; align-items: center; gap: 10px;">
+                                        <span>📄</span>
+                                        <a href="#" onclick="openEvidenceModal('{{ Storage::url($evidence->file_path) }}'); return false;" style="color: #e11d48; font-weight: 600; text-decoration: none;">
+                                            View Evidence #{{ $loop->iteration }}
+                                        </a>
+                                        <span style="color: #94a3b8; font-size: 0.8rem; margin-left: auto;">
+                                            {{ $evidence->created_at->format('M d H:i') }}
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @else
+                        <p style="color: #be123c; font-size: 0.9rem; font-style: italic;">No evidence submitted yet.</p>
                     @endif
 
                     @if(auth()->user()->hasRole('arbiter'))
@@ -494,4 +518,54 @@
     window.onclick = function(e) { if(e.target == document.getElementById('paymentModal')) closePaymentModal(); }
 </script>
 @endif
+
+<!-- Evidence Modal (Generic) -->
+<div id="evidenceModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 800px; max-height: 90vh; text-align: center; position: relative; display: flex; flex-direction: column;">
+        <button onclick="closeEvidenceModal()" style="position: absolute; top: 10px; right: 10px; background: #f1f5f9; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
+        <h3 style="margin-bottom: 15px; color: #334155;">Evidence Preview</h3>
+        <div style="flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 10px; padding: 10px;">
+            <img id="evidenceImage" src="" alt="Evidence" style="max-width: 100%; max-height: 70vh; display: none; border-radius: 8px;">
+            <p id="evidenceFallback" style="display: none; color: #64748b;">Cannot preview this file type.<br><a id="evidenceLink" href="#" target="_blank" style="color: #6366f1;">Download / View in New Tab</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openEvidenceModal(url) {
+        const modal = document.getElementById('evidenceModal');
+        const img = document.getElementById('evidenceImage');
+        const fallback = document.getElementById('evidenceFallback');
+        const link = document.getElementById('evidenceLink');
+
+        modal.style.display = 'flex';
+        
+        // Simple check for images based on common extensions (not perfect but mostly works for 'photos')
+        // Or we just try to load it as an image.
+        // For now, let's treat everything as image since user said "photo"
+        // But add error handling to show fallback if image fails to load.
+        
+        img.style.display = 'block';
+        img.src = url;
+        fallback.style.display = 'none';
+        
+        img.onerror = function() {
+            img.style.display = 'none';
+            fallback.style.display = 'block';
+            link.href = url;
+        };
+    }
+
+    function closeEvidenceModal() {
+        document.getElementById('evidenceModal').style.display = 'none';
+        document.getElementById('evidenceImage').src = '';
+    }
+    
+    // Add close on outside click for evidence modal too
+    window.addEventListener('click', function(e) {
+        if(e.target == document.getElementById('evidenceModal')) {
+            closeEvidenceModal();
+        }
+    });
+</script>
 @endsection

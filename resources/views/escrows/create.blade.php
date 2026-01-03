@@ -207,7 +207,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Select Seller</label>
-                    <select name="seller_id" class="form-select">
+                    <select name="seller_id" class="form-select ">
                         <option value="">Choose a verified seller...</option>
                         @foreach($sellers as $seller)
                             <option value="{{ $seller->id }}" {{ old('seller_id') == $seller->id ? 'selected' : '' }}>

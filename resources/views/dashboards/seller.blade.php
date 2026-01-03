@@ -211,9 +211,7 @@
             </div>
         </div>
 
-        <div style="margin-top: 40px; display: flex; justify-content: center;">
-            {{ $escrows->links() }}
-        </div>
+
     @endif
 </div>
 @endsection
