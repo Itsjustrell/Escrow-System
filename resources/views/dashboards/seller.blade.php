@@ -3,254 +3,217 @@
 @section('content')
 <style>
     .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
+        padding: 40px 0;
     }
 
-    .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+    .glass-banner {
+        background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+                    #1e293b;
+        border-radius: 20px;
         padding: 40px;
-        border-radius: 12px;
+        color: white;
+        position: relative;
+        overflow: hidden;
         margin-bottom: 40px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
     }
 
-    .dashboard-title {
+    .banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-content h1 {
         font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 10px;
+        font-weight: 800;
+        margin-bottom: 5px;
+        letter-spacing: -1px;
     }
 
-    .dashboard-welcome {
-        font-size: 1.2rem;
-        opacity: 0.95;
+    .banner-content p {
+        color: #94a3b8;
+        font-size: 1.1rem;
     }
 
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 25px;
+    .section-header {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        margin-bottom: 25px;
     }
 
-    .empty-state {
-        background: #f8f9fa;
-        padding: 60px 40px;
-        border-radius: 12px;
-        text-align: center;
-        border: 2px dashed #ddd;
+    .section-header h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #334155;
     }
 
-    .empty-icon {
-        font-size: 4rem;
-        margin-bottom: 20px;
-        opacity: 0.3;
+    .section-icon {
+        width: 32px;
+        height: 32px;
+        background: #e0e7ff;
+        color: #4f46e5;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
     }
 
-    .empty-text {
-        font-size: 1.1rem;
-        color: #666;
-    }
-
-    .escrow-table {
-        width: 100%;
+    .modern-table-card {
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
         overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
-    .escrow-table table {
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
         width: 100%;
         border-collapse: collapse;
     }
 
-    .escrow-table th {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 18px;
+    th {
+        background: #f8fafc;
+        padding: 16px 24px;
         text-align: left;
-        font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #475569;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        border-bottom: 1px solid #e2e8f0;
     }
 
-    .escrow-table td {
-        padding: 18px;
-        border-bottom: 1px solid #f0f0f0;
-        color: #333;
+    td {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        font-size: 0.95rem;
     }
 
-    .escrow-table tr:last-child td {
+    tr:last-child td {
         border-bottom: none;
     }
 
-    .escrow-table tr:hover {
-        background: #f8f9fa;
+    tr:hover td {
+        background: #f8fafc;
     }
 
     .status-badge {
-        display: inline-block;
-        padding: 6px 14px;
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    /* Status Colors */
+    .status-created { background: #e0f2fe; color: #0369a1; }
+    .status-funded { background: #fef9c3; color: #854d0e; }
+    .status-shipping { background: #e0e7ff; color: #4338ca; }
+    .status-delivered { background: #dbeafe; color: #1e40af; }
+    .status-completed { background: #dcfce7; color: #15803d; }
+    .status-disputed { background: #fee2e2; color: #991b1b; }
+
+    .btn-view-sm {
+        color: #6366f1;
         font-weight: 600;
-        text-transform: capitalize;
-    }
-
-    .status-pending {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .status-funded {
-        background: #d1ecf1;
-        color: #0c5460;
-    }
-
-    .status-delivered {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .status-completed {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .status-disputed {
-        background: #f8d7da;
-        color: #721c24;
-    }
-
-    .btn-view {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 8px 20px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 6px 12px;
         border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        transition: all 0.3s;
-        display: inline-block;
+        background: #eef2ff;
+        transition: all 0.2s;
     }
 
-    .btn-view:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-all-escrows {
-        background: white;
-        color: #667eea;
-        padding: 12px 30px;
-        border: 2px solid #667eea;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        display: inline-block;
-        margin-top: 30px;
-        transition: all 0.3s;
-    }
-
-    .btn-all-escrows:hover {
-        background: #667eea;
+    .btn-view-sm:hover {
+        background: #6366f1;
         color: white;
     }
 
-    .pagination-wrapper {
-        margin-top: 25px;
-        display: flex;
-        justify-content: center;
-    }
-
-    @media (max-width: 768px) {
-        .dashboard-container {
-            padding: 20px 15px;
-        }
-
-        .dashboard-header {
-            padding: 30px 20px;
-        }
-
-        .dashboard-title {
-            font-size: 1.8rem;
-        }
-
-        .escrow-table {
-            overflow-x: auto;
-        }
-
-        .escrow-table table {
-            min-width: 600px;
-        }
+    .empty-state {
+        text-align: center;
+        padding: 60px;
+        background: white;
+        border-radius: 20px;
+        border: 2px dashed #e2e8f0;
     }
 </style>
 
 <div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">Seller Dashboard</h1>
-        <p class="dashboard-welcome">Welcome back, <strong>{{ auth()->user()->name }}</strong> 👋</p>
+    <div class="glass-banner">
+        <div class="banner-content">
+            <h1>Seller Dashboard</h1>
+            <p>Track your incoming orders and manage shipments efficiently.</p>
+        </div>
     </div>
 
-    <h3 class="section-title">
-        <span>📦</span> Escrows to Process
-    </h3>
+    <div class="section-header">
+        <div class="section-icon">📦</div>
+        <h3>Incoming Orders</h3>
+    </div>
 
     @if($escrows->count() === 0)
         <div class="empty-state">
-            <div class="empty-icon">📭</div>
-            <p class="empty-text">No escrows assigned to you at the moment.</p>
+            <div style="font-size: 3rem; margin-bottom: 15px;">�</div>
+            <h3 style="margin-bottom: 10px; color: #334155;">No orders yet</h3>
+            <p style="color: #64748b;">Waiting for buyers to create transactions with you.</p>
         </div>
     @else
-        <div class="escrow-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($escrows as $escrow)
-                    <tr>
-                        <td><strong>#{{ $escrow->id }}</strong></td>
-                        <td>{{ $escrow->title }}</td>
-                        <td><strong>${{ number_format($escrow->amount, 2) }}</strong></td>
-                        <td>
-                            <span class="status-badge status-{{ strtolower($escrow->status) }}">
-                                {{ $escrow->status }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ route('escrows.show', $escrow) }}" class="btn-view">
-                                View Details
-                            </a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="modern-table-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($escrows as $escrow)
+                        <tr>
+                            <td>
+                                <span style="font-family: monospace; color: #64748b;">#TRANS-{{ $escrow->id }}</span>
+                            </td>
+                            <td>
+                                <div style="font-weight: 600;">{{ $escrow->title }}</div>
+                                <div style="font-size: 0.85rem; color: #94a3b8;">{{ $escrow->created_at->format('M d, Y') }}</div>
+                            </td>
+                            <td style="font-weight: 700; color: #0f172a;">
+                                ${{ number_format($escrow->amount, 2) }}
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ strtolower($escrow->status) }}">
+                                    {{ $escrow->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('escrows.show', $escrow) }}" class="btn-view-sm">
+                                    Manage
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="pagination-wrapper">
+        <div style="margin-top: 40px; display: flex; justify-content: center;">
             {{ $escrows->links() }}
         </div>
     @endif
-
-    <div style="text-align: center;">
-        <a href="{{ route('escrows.index') }}" class="btn-all-escrows">
-            View All Escrows →
-        </a>
-    </div>
 </div>
-
 @endsection

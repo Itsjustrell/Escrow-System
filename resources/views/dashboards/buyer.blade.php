@@ -3,18 +3,25 @@
 @section('content')
 <style>
     .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
+        padding: 40px 0;
     }
 
-    .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+    .glass-banner {
+        background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+                    #1e293b;
+        border-radius: 20px;
         padding: 40px;
-        border-radius: 12px;
+        color: white;
+        position: relative;
+        overflow: hidden;
         margin-bottom: 40px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -22,289 +29,229 @@
         gap: 20px;
     }
 
-    .header-content {
-        flex: 1;
-    }
-
-    .dashboard-title {
+    .welcome-text h1 {
         font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 10px;
+        font-weight: 800;
+        margin-bottom: 5px;
+        letter-spacing: -1px;
     }
 
-    .dashboard-welcome {
-        font-size: 1.2rem;
-        opacity: 0.95;
+    .welcome-text p {
+        color: #94a3b8;
+        font-size: 1.1rem;
     }
 
-    .btn-create {
+    .btn-action {
         background: white;
-        color: #667eea;
-        padding: 14px 28px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s;
+        color: #0f172a;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
-    .btn-create:hover {
+    .btn-action:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
     }
 
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 25px;
+    .section-header {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        margin-bottom: 25px;
     }
 
-    .empty-state {
-        background: white;
-        padding: 80px 40px;
-        border-radius: 12px;
-        text-align: center;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-
-    .empty-icon {
-        font-size: 5rem;
-        margin-bottom: 20px;
-        opacity: 0.3;
-    }
-
-    .empty-title {
+    .section-header h3 {
         font-size: 1.5rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 10px;
+        font-weight: 700;
+        color: #334155;
     }
 
-    .empty-text {
-        font-size: 1.1rem;
-        color: #666;
-        margin-bottom: 30px;
-    }
-
-    .btn-empty-create {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 14px 32px;
-        border: none;
+    .section-icon {
+        width: 32px;
+        height: 32px;
+        background: #e0e7ff;
+        color: #4f46e5;
         border-radius: 8px;
-        font-weight: 600;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 8px;
-        text-decoration: none;
+        justify-content: center;
+        font-size: 1.2rem;
     }
 
-    .btn-empty-create:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .escrow-grid {
+    .grid-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 25px;
-        margin-bottom: 30px;
     }
 
-    .escrow-card {
+    .transaction-card {
         background: white;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        transition: all 0.3s;
-        border: 2px solid transparent;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
 
-    .escrow-card:hover {
+    .transaction-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        border-color: #667eea;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        border-color: #6366f1;
     }
 
-    .card-header {
+    .card-top {
         display: flex;
         justify-content: space-between;
-        align-items: start;
+        align-items: flex-start;
         margin-bottom: 15px;
     }
 
     .card-id {
-        font-size: 0.9rem;
-        color: #999;
+        font-size: 0.85rem;
         font-weight: 600;
-    }
-
-    .card-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
+        color: #94a3b8;
+        background: #f1f5f9;
+        padding: 4px 10px;
+        border-radius: 6px;
     }
 
     .card-amount {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: #667eea;
-        margin-bottom: 15px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #0f172a;
     }
 
-    .card-status {
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #334155;
         margin-bottom: 20px;
+        line-height: 1.4;
     }
 
-    .status-badge {
+    .status-pill {
         display: inline-block;
         padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: capitalize;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .status-created { background: #e3f2fd; color: #1565c0; }
-    .status-funded { background: #fff3cd; color: #856404; }
-    .status-shipping { background: #d1ecf1; color: #0c5460; }
-    .status-delivered { background: #cfe2ff; color: #084298; }
-    .status-completed { background: #d4edda; color: #155724; }
-    .status-disputed { background: #f8d7da; color: #721c24; }
+    /* Status Colors */
+    .status-created { background: #e0f2fe; color: #0369a1; }
+    .status-funded { background: #fef9c3; color: #854d0e; }
+    .status-shipping { background: #e0e7ff; color: #4338ca; }
+    .status-delivered { background: #dbeafe; color: #1e40af; }
+    .status-completed { background: #dcfce7; color: #15803d; }
+    .status-disputed { background: #fee2e2; color: #991b1b; }
+    .status-cancelled { background: #f1f5f9; color: #475569; }
 
-    .btn-view {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 10px 24px;
-        border-radius: 6px;
+    .card-footer {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+        text-align: right;
+    }
+
+    .link-details {
+        color: #6366f1;
+        font-weight: 600;
         text-decoration: none;
-        font-weight: 500;
-        display: inline-block;
-        transition: all 0.3s;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+
+    .link-details:hover {
+        color: #4338ca;
+    }
+
+    .empty-state {
         text-align: center;
-        width: 100%;
-    }
-
-    .btn-view:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-all-escrows {
+        padding: 60px;
         background: white;
-        color: #667eea;
-        padding: 12px 30px;
-        border: 2px solid #667eea;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        display: inline-block;
-        margin-top: 30px;
-        transition: all 0.3s;
-    }
-
-    .btn-all-escrows:hover {
-        background: #667eea;
-        color: white;
+        border-radius: 20px;
+        border: 2px dashed #e2e8f0;
     }
 
     @media (max-width: 768px) {
-        .dashboard-container {
-            padding: 20px 15px;
-        }
-
-        .dashboard-header {
-            padding: 30px 20px;
+        .banner-content {
             flex-direction: column;
             align-items: flex-start;
+            text-align: left;
         }
-
-        .dashboard-title {
-            font-size: 1.8rem;
-        }
-
-        .btn-create {
+        
+        .btn-action {
             width: 100%;
             justify-content: center;
-        }
-
-        .escrow-grid {
-            grid-template-columns: 1fr;
         }
     }
 </style>
 
 <div class="dashboard-container">
-    <div class="dashboard-header">
-        <div class="header-content">
-            <h1 class="dashboard-title">Buyer Dashboard</h1>
-            <p class="dashboard-welcome">Welcome back, <strong>{{ auth()->user()->name }}</strong> 👋</p>
+    <!-- Premium Banner -->
+    <div class="glass-banner">
+        <div class="banner-content">
+            <div class="welcome-text">
+                <h1>Buyer Dashboard</h1>
+                <p>Welcome back, {{ auth()->user()->name }}! Ready to secure your next deal?</p>
+            </div>
+            <a href="{{ route('escrows.create') }}" class="btn-action">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                New Transaction
+            </a>
         </div>
-        <a href="{{ route('escrows.create') }}" class="btn-create">
-            <span style="font-size: 1.2rem;">+</span>
-            Create New Escrow
-        </a>
     </div>
 
-    <h3 class="section-title">
-        <span>🛒</span> Your Escrows
-    </h3>
+    <!-- Active Transactions -->
+    <div class="section-header">
+        <div class="section-icon">🛒</div>
+        <h3>Your Active Escrows</h3>
+    </div>
 
     @if($escrows->count() === 0)
         <div class="empty-state">
-            <div class="empty-icon">📦</div>
-            <h3 class="empty-title">No Escrows Yet</h3>
-            <p class="empty-text">Start your first secure transaction by creating an escrow</p>
-            <a href="{{ route('escrows.create') }}" class="btn-empty-create">
-                <span style="font-size: 1.2rem;">+</span>
-                Create Your First Escrow
-            </a>
+            <div style="font-size: 3rem; margin-bottom: 15px;">🛍️</div>
+            <h3 style="margin-bottom: 10px; color: #334155;">No transactions yet</h3>
+            <p style="color: #64748b; margin-bottom: 25px;">Start creating safe transactions with EscrowSecure.</p>
+            <a href="{{ route('escrows.create') }}" style="color: #6366f1; font-weight: 600; text-decoration: none;">Create Escrow &rarr;</a>
         </div>
     @else
-        <div class="escrow-grid">
+        <div class="grid-cards">
             @foreach($escrows as $escrow)
-            <div class="escrow-card">
-                <div class="card-header">
-                    <span class="card-id">#{{ $escrow->id }}</span>
-                </div>
-                <h3 class="card-title">{{ $escrow->title }}</h3>
-                <div class="card-amount">${{ number_format($escrow->amount, 2) }}</div>
-                <div class="card-status">
-                    <span class="status-badge status-{{ strtolower($escrow->status) }}">
+            <div class="transaction-card">
+                <div class="card-top">
+                    <span class="card-id">#TRANS-{{ $escrow->id }}</span>
+                    <span class="status-pill status-{{ strtolower($escrow->status) }}">
                         {{ $escrow->status }}
                     </span>
                 </div>
-                <a href="{{ route('escrows.show', $escrow) }}" class="btn-view">
-                    View Details →
-                </a>
+                
+                <h4 class="card-title">{{ $escrow->title }}</h4>
+                <div class="card-amount">${{ number_format($escrow->amount, 2) }}</div>
+                
+                <div class="card-footer">
+                    <a href="{{ route('escrows.show', $escrow) }}" class="link-details">View Details &rarr;</a>
+                </div>
             </div>
             @endforeach
         </div>
 
-        <div class="pagination-wrapper" style="display: flex; justify-content: center; margin-top: 30px;">
+        <div style="margin-top: 40px; display: flex; justify-content: center;">
             {{ $escrows->links() }}
         </div>
     @endif
-
-    <div style="text-align: center;">
-        <a href="{{ route('escrows.index') }}" class="btn-all-escrows">
-            View All Escrows →
-        </a>
-    </div>
 </div>
-
 @endsection

@@ -3,523 +3,495 @@
 @section('content')
 <style>
     .detail-container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 40px 20px;
+        padding: 40px 0;
     }
 
-    .detail-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+    /* Glass Header */
+    .glass-header-card {
+        background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+                    #1e293b;
+        border-radius: 20px;
         padding: 40px;
-        border-radius: 12px;
+        color: white;
         margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
     }
 
-    .detail-title {
-        font-size: 2rem;
-        font-weight: bold;
+    .header-info h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
         margin-bottom: 5px;
     }
 
-    .detail-subtitle {
-        opacity: 0.9;
+    .header-info p {
+        color: #94a3b8;
+        font-size: 1.1rem;
     }
 
-    .info-card {
+    .header-amount {
+        text-align: right;
+    }
+
+    .amount-display {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .amount-label {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Timeline */
+    .timeline-container {
         background: white;
         padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        margin-bottom: 25px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        overflow-x: auto;
     }
 
-    .info-row {
+    .timeline-track {
         display: flex;
         justify-content: space-between;
-        padding: 15px 0;
-        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+        min-width: 600px;
     }
 
-    .info-row:last-child {
-        border-bottom: none;
+    .timeline-line {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #f1f5f9;
+        z-index: 1;
     }
 
-    .info-label {
-        font-weight: 600;
-        color: #666;
+    .timeline-progress {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        height: 4px;
+        background: #6366f1;
+        z-index: 1;
+        transition: width 0.5s ease;
     }
 
-    .info-value {
-        font-weight: 600;
-        color: #333;
+    .timeline-step {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        width: 120px;
     }
 
-    .amount-value {
-        font-size: 1.5rem;
-        color: #667eea;
+    .step-dot {
+        width: 44px;
+        height: 44px;
+        background: white;
+        border: 4px solid #f1f5f9;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #94a3b8;
+        transition: all 0.3s;
     }
 
-    .status-badge {
-        display: inline-block;
-        padding: 8px 16px;
-        border-radius: 20px;
+    .step-active .step-dot {
+        border-color: #6366f1;
+        background: #6366f1;
+        color: white;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    }
+
+    .step-completed .step-dot {
+        border-color: #6366f1;
+        background: #6366f1;
+        color: white;
+    }
+
+    .step-label {
         font-size: 0.9rem;
         font-weight: 600;
-        text-transform: capitalize;
+        color: #64748b;
     }
 
-    .status-created { background: #e3f2fd; color: #1565c0; }
-    .status-funded { background: #fff3cd; color: #856404; }
-    .status-shipping { background: #d1ecf1; color: #0c5460; }
-    .status-delivered { background: #cfe2ff; color: #084298; }
-    .status-completed { background: #d4edda; color: #155724; }
-    .status-disputed { background: #f8d7da; color: #721c24; }
+    .step-active .step-label {
+        color: #0f172a;
+        font-weight: 700;
+    }
 
-    .action-card {
+    /* Action Panels */
+    .action-panel {
         background: white;
+        border-radius: 20px;
         padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
     }
 
-    .action-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 20px;
+    .panel-header {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f1f5f9;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .panel-header h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .panel-icon {
+        width: 36px;
+        height: 36px;
+        background: #eff6ff;
+        color: #6366f1;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    /* Buttons */
+    .btn-action-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
         color: white;
-        padding: 12px 30px;
+        padding: 14px 28px;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s;
-        font-size: 1rem;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-danger {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        padding: 12px 30px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 1rem;
-    }
-
-    .btn-danger:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
-    }
-
-    .btn-success {
-        background: linear-gradient(135deg, #a8edea 0%, #43cea2 100%);
-        color: white;
-        padding: 12px 30px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 1rem;
-    }
-
-    .btn-success:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(67, 206, 162, 0.4);
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-input {
         width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: all 0.3s;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
     }
 
-    .form-input:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    .btn-action-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
     }
 
-    .file-input {
-        padding: 10px;
-        border: 2px dashed #e0e0e0;
-        border-radius: 8px;
+    .btn-action-success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
         cursor: pointer;
+        width: 100%;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
     }
 
-    .alert-info {
-        background: #e3f2fd;
-        border-left: 4px solid #2196f3;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin-top: 15px;
-    }
-
-    .dispute-section {
-        background: #fff3cd;
-        padding: 25px;
-        border-radius: 12px;
-        border-left: 4px solid #ffc107;
-        margin-bottom: 25px;
-    }
-
-    .dispute-title {
-        font-size: 1.3rem;
+    .btn-action-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 10px;
         font-weight: 600;
-        color: #856404;
-        margin-bottom: 15px;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.2s;
     }
 
-    .evidence-list {
-        list-style: none;
-        padding: 0;
+    /* Dispute Section */
+    .dispute-panel {
+        background: #fff1f2;
+        border: 1px solid #fecdd3;
     }
 
-    .evidence-item {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 10px;
+    .dispute-panel .panel-icon {
+        background: #ffe4e6;
+        color: #e11d48;
+    }
+
+    .dispute-panel .panel-header h3 {
+        color: #881337;
+    }
+
+    .info-list {
         display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .evidence-link {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .evidence-link:hover {
-        text-decoration: underline;
-    }
-
-    .button-group {
-        display: flex;
+        flex-direction: column;
         gap: 15px;
-        flex-wrap: wrap;
+    }
+
+    .list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    .item-label { color: #64748b; font-weight: 600; }
+    .item-value { color: #0f172a; font-weight: 600; }
+
+    /* Modal Styles */
+    .modal-overlay {
+        backdrop-filter: blur(5px);
+        background: rgba(15, 23, 42, 0.6);
+    }
+    
+    .modal-content {
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
 
     @media (max-width: 768px) {
-        .detail-container {
-            padding: 20px 15px;
-        }
-
-        .detail-header {
-            padding: 25px 20px;
-        }
-
-        .info-row {
+        .glass-header-card {
             flex-direction: column;
-            gap: 5px;
+            text-align: center;
         }
-
-        .button-group {
-            flex-direction: column;
-        }
-
-        .button-group button {
-            width: 100%;
+        
+        .header-amount {
+            text-align: center;
         }
     }
 </style>
 
+@php
+    $steps = ['created', 'funded', 'shipping', 'delivered', 'completed'];
+    $currentStepIndex = array_search($escrow->status === 'disputed' ? 'delivered' : $escrow->status, $steps);
+    $progressWidth = max(0, min(100, $currentStepIndex * 25));
+@endphp
+
 <div class="detail-container">
-    <div class="detail-header">
-        <h1 class="detail-title">Escrow Detail</h1>
-        <p class="detail-subtitle">Transaction ID: #{{ $escrow->id }}</p>
-    </div>
-
-    <div class="info-card">
-        <div class="info-row">
-            <span class="info-label">📋 Title</span>
-            <span class="info-value">{{ $escrow->title }}</span>
+    <!-- Header -->
+    <div class="glass-header-card">
+        <div class="header-info">
+            <h1>{{ $escrow->title }}</h1>
+            <p>Transaction ID: #{{ $escrow->id }}</p>
         </div>
-        <div class="info-row">
-            <span class="info-label">💰 Amount</span>
-            <span class="info-value amount-value">${{ number_format($escrow->amount, 2) }}</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">📊 Status</span>
-            <span class="status-badge status-{{ strtolower($escrow->status) }}">
-                {{ $escrow->status }}
-            </span>
+        <div class="header-amount">
+            <div class="amount-label">Escrow Amount</div>
+            <div class="amount-display">${{ number_format($escrow->amount, 2) }}</div>
         </div>
     </div>
 
-    {{-- ========================= --}}
-    {{-- BUYER ACTIONS --}}
-    {{-- ========================= --}}
-    @if(auth()->user()->hasRole('buyer'))
-
-        @if($escrow->status === 'created')
-            <div class="action-card">
-                <h3 class="action-title">💳 Fund this Escrow</h3>
-                <button type="button" class="btn-primary" onclick="openPaymentModal()">Fund Escrow</button>
-            </div>
-        @endif
-
-        @if($escrow->status === 'delivered')
-            <div class="action-card">
-                <h3 class="action-title">✅ Confirm Delivery</h3>
-                <form method="POST" action="/escrows/{{ $escrow->id }}/release">
-                    @csrf
-                    <button type="submit" class="btn-success">Release Funds to Seller</button>
-                </form>
-
-                <hr style="margin: 25px 0; border: none; border-top: 1px solid #e0e0e0;">
-
-                <h3 class="action-title">⚠️ Report an Issue</h3>
-                <form method="POST" action="/escrows/{{ $escrow->id }}/dispute">
-                    @csrf
-                    <div class="form-group">
-                        <input type="text" 
-                               name="reason" 
-                               class="form-input" 
-                               placeholder="Describe the issue with this transaction" 
-                               required>
-                    </div>
-                    <button type="submit" class="btn-danger">Open Dispute</button>
-                </form>
-
-                <div class="alert-info">
-                    <strong>⏰ Auto-release deadline:</strong> {{ $escrow->confirm_deadline }}
-                </div>
-            </div>
-        @endif
-
-    @endif
-
-    {{-- ========================= --}}
-    {{-- SELLER ACTIONS --}}
-    {{-- ========================= --}}
-    @if(auth()->user()->hasRole('seller'))
-
-        @if($escrow->status === 'funded')
-            <div class="action-card">
-                <h3 class="action-title">📦 Ship the Item</h3>
-                <form method="POST" action="/escrows/{{ $escrow->id }}/ship">
-                    @csrf
-                    <button type="submit" class="btn-primary">Mark as Shipped</button>
-                </form>
-            </div>
-        @endif
-
-        @if($escrow->status === 'shipping')
-            <div class="action-card">
-                <h3 class="action-title">✅ Confirm Delivery</h3>
-                <form method="POST" action="/escrows/{{ $escrow->id }}/deliver">
-                    @csrf
-                    <button type="submit" class="btn-success">Mark as Delivered</button>
-                </form>
-            </div>
-        @endif
-
-    @endif
-
-    {{-- ========================= --}}
-    {{-- DISPUTED STATE --}}
-    {{-- ========================= --}}
-    @if($escrow->status === 'disputed')
-
-        <div class="dispute-section">
-            <h3 class="dispute-title">⚠️ Dispute Information</h3>
+    <!-- Timeline -->
+    <div class="timeline-container">
+        <div class="timeline-track">
+            <div class="timeline-line"></div>
+            <div class="timeline-progress" style="width: {{ $progressWidth }}%"></div>
             
-            <div class="info-row">
-                <span class="info-label">Reason</span>
-                <span class="info-value">{{ $escrow->dispute->reason }}</span>
+            <div class="timeline-step {{ $currentStepIndex >= 0 ? 'step-active' : '' }} {{ $currentStepIndex > 0 ? 'step-completed' : '' }}">
+                <div class="step-dot">📝</div>
+                <div class="step-label">Created</div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Status</span>
-                <span class="status-badge status-{{ strtolower($escrow->dispute->status) }}">
-                    {{ $escrow->dispute->status }}
-                </span>
+            <div class="timeline-step {{ $currentStepIndex >= 1 ? 'step-active' : '' }} {{ $currentStepIndex > 1 ? 'step-completed' : '' }}">
+                <div class="step-dot">💳</div>
+                <div class="step-label">Funded</div>
             </div>
-        </div>
-
-        {{-- BUYER: UPLOAD EVIDENCE --}}
-        @if(auth()->user()->hasRole('buyer'))
-            <div class="action-card">
-                <h3 class="action-title">📎 Upload Evidence</h3>
-                <form method="POST"
-                    action="{{ route('escrows.dispute.evidence', $escrow) }}"
-                    enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group">
-                        <input type="file" name="file" class="file-input" required>
-                    </div>
-                    <button type="submit" class="btn-primary">Upload Evidence</button>
-                </form>
+            <div class="timeline-step {{ $currentStepIndex >= 2 ? 'step-active' : '' }} {{ $currentStepIndex > 2 ? 'step-completed' : '' }}">
+                <div class="step-dot">📦</div>
+                <div class="step-label">Shipped</div>
             </div>
-        @endif
-
-        {{-- LIST EVIDENCES --}}
-        <div class="action-card">
-            <h3 class="action-title">📁 Submitted Evidence</h3>
-            @if($escrow->dispute->evidences->count() > 0)
-                <ul class="evidence-list">
-                    @foreach($escrow->dispute->evidences as $evidence)
-                        <li class="evidence-item">
-                            📄
-                            <a href="{{ Storage::url($evidence->file_path) }}" 
-                               target="_blank" 
-                               class="evidence-link">
-                                View Evidence #{{ $loop->iteration }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <p style="color: #666;">No evidence submitted yet.</p>
-            @endif
-        </div>
-
-        {{-- ARBITER ACTION --}}
-        @if(auth()->user()->hasRole('arbiter'))
-            <div class="action-card">
-                <h3 class="action-title">⚖️ Resolve Dispute</h3>
-                <form method="POST" action="/escrows/{{ $escrow->id }}/dispute/resolve">
-                    @csrf
-                    <div class="button-group">
-                        <button name="resolution" value="release" class="btn-success">
-                            ✅ Release to Seller
-                        </button>
-                        <button name="resolution" value="refund" class="btn-danger">
-                            💸 Refund to Buyer
-                        </button>
-                    </div>
-                </form>
+            <div class="timeline-step {{ $currentStepIndex >= 3 ? 'step-active' : '' }} {{ $currentStepIndex > 3 ? 'step-completed' : '' }}">
+                <div class="step-dot">✅</div>
+                <div class="step-label">Delivered</div>
             </div>
-        @endif
-
-    @endif
-
-    @if(auth()->user()->hasRole('buyer') && $escrow->status === 'created')
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Scan to Pay</h3>
-                <button type="button" class="close-btn" onclick="closePaymentModal()">&times;</button>
-            </div>
-            <div class="modal-body" style="text-align: center;">
-                <p>Please scan the QR code below to fund this escrow.</p>
-                <div style="margin: 20px auto; display: inline-block; padding: 10px; background: white; border: 1px solid #ddd; border-radius: 8px;">
-                    {!! QrCode::size(200)->generate(
-                        rtrim(config('app.url'), '/') . route('escrows.pay', $escrow, false)
-                    ) !!}
-                </div>
-                <p class="amount-value" style="font-size: 1.2rem;">Total: ${{ number_format($escrow->amount, 2) }}</p>
-            </div>
-            <div class="modal-footer">
-                <form method="POST" action="/escrows/{{ $escrow->id }}/fund">
-                    @csrf
-                    <button type="submit" class="btn-primary" style="width: 100%;">Confirm Payment</button>
-                </form>
+            <div class="timeline-step {{ $currentStepIndex >= 4 ? 'step-active' : '' }} {{ $currentStepIndex > 4 ? 'step-completed' : '' }}">
+                <div class="step-dot">🎉</div>
+                <div class="step-label">Completed</div>
             </div>
         </div>
     </div>
 
-    <style>
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;">
+        
+        <!-- Info Panel -->
+        <div class="action-panel">
+            <div class="panel-header">
+                <div class="panel-icon">ℹ️</div>
+                <h3>Transaction Details</h3>
+            </div>
+            <div class="info-list">
+                <div class="list-item">
+                    <span class="item-label">Current Status</span>
+                    <span class="item-value" style="text-transform: uppercase; color: #6366f1;">{{ $escrow->status }}</span>
+                </div>
+                <div class="list-item">
+                    <span class="item-label">Seller</span>
+                    <span class="item-value">{{ $escrow->participants->where('role', 'seller')->first()->user->name ?? 'Unknown' }}</span>
+                </div>
+                <div class="list-item">
+                    <span class="item-label">Buyer</span>
+                    <span class="item-value">{{ $escrow->created_by == auth()->id() ? 'You' : $escrow->creator->name }}</span>
+                </div>
+                <div class="list-item">
+                    <span class="item-label">Last Update</span>
+                    <span class="item-value">{{ $escrow->updated_at->diffForHumans() }}</span>
+                </div>
+            </div>
+        </div>
 
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            animation: modalSlideIn 0.3s ease-out;
-        }
+        <!-- Actions Panel -->
+        <div class="actions-wrapper">
+            
+            {{-- BUYER ACTIONS --}}
+            @if(auth()->user()->hasRole('buyer'))
+                @if($escrow->status === 'created')
+                    <div class="action-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">💳</div>
+                            <h3>Payment Required</h3>
+                        </div>
+                        <p style="color: #64748b; margin-bottom: 20px;">Funds are required to start the shipping process.</p>
+                        <button type="button" class="btn-action-primary" onclick="openPaymentModal()">Fund Escrow Now</button>
+                    </div>
+                @endif
 
-        @keyframes modalSlideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+                @if($escrow->status === 'delivered')
+                    <div class="action-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">✅</div>
+                            <h3>Confirm Delivery</h3>
+                        </div>
+                        <p style="color: #64748b; margin-bottom: 20px;">Please inspect your item. You have until <strong>{{ $escrow->confirm_deadline }}</strong> to release funds.</p>
+                        
+                        <form method="POST" action="/escrows/{{ $escrow->id }}/release">
+                            @csrf
+                            <button type="submit" class="btn-action-success" style="margin-bottom: 15px;">Release Funds to Seller</button>
+                        </form>
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+                        <div style="border-top: 1px solid #f1f5f9; padding-top: 20px; margin-top: 20px;">
+                            <h4 style="color: #334155; margin-bottom: 15px;">Issues with the item?</h4>
+                            <form method="POST" action="/escrows/{{ $escrow->id }}/dispute">
+                                @csrf
+                                <input type="text" name="reason" class="form-input" placeholder="Describe the issue..." required style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 10px;">
+                                <button type="submit" class="btn-action-danger" style="padding: 10px;">Open Dispute</button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            @endif
 
-        .modal-header h3 {
-            margin: 0;
-            color: #333;
-        }
+            {{-- SELLER ACTIONS --}}
+            @if(auth()->user()->hasRole('seller'))
+                @if($escrow->status === 'funded')
+                    <div class="action-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">📦</div>
+                            <h3>Ready to Ship</h3>
+                        </div>
+                        <p style="color: #64748b; margin-bottom: 20px;">Funds have been secured. Please ship the item.</p>
+                        <form method="POST" action="/escrows/{{ $escrow->id }}/ship">
+                            @csrf
+                            <button type="submit" class="btn-action-primary">Mark as Shipped</button>
+                        </form>
+                    </div>
+                @endif
 
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
+                @if($escrow->status === 'shipping')
+                    <div class="action-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">🚚</div>
+                            <h3>Shipping in Progress</h3>
+                        </div>
+                        <p style="color: #64748b; margin-bottom: 20px;">Confirm when the item has reached the buyer.</p>
+                        <form method="POST" action="/escrows/{{ $escrow->id }}/deliver">
+                            @csrf
+                            <button type="submit" class="btn-action-success">Mark as Delivered</button>
+                        </form>
+                    </div>
+                @endif
+            @endif
 
-        .modal-footer {
-            margin-top: 20px;
-        }
-    </style>
+            {{-- DISPUTE ACTIONS --}}
+            @if($escrow->status === 'disputed')
+                <div class="action-panel dispute-panel">
+                    <div class="panel-header">
+                        <div class="panel-icon">⚠️</div>
+                        <h3>Dispute Active</h3>
+                    </div>
+                    
+                    <div class="info-list" style="margin-bottom: 20px;">
+                        <div class="list-item" style="background: white;">
+                            <span class="item-label">Reason</span>
+                            <span class="item-value">{{ $escrow->dispute->reason }}</span>
+                        </div>
+                    </div>
 
-    <script>
-        function openPaymentModal() {
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
+                    @if(auth()->user()->hasRole('buyer'))
+                        <h4 style="margin-bottom: 10px; color: #881337;">Submit Evidence</h4>
+                        <form method="POST" action="{{ route('escrows.dispute.evidence', $escrow) }}" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" style="margin-bottom: 10px; width: 100%;">
+                            <button type="submit" class="btn-action-primary" style="background: #e11d48;">Upload File</button>
+                        </form>
+                    @endif
 
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
+                    @if(auth()->user()->hasRole('arbiter'))
+                        <h4 style="margin: 20px 0 10px; color: #881337;">Arbiter Resolution</h4>
+                        <form method="POST" action="/escrows/{{ $escrow->id }}/dispute/resolve">
+                            @csrf
+                            <div style="display: flex; gap: 10px;">
+                                <button name="resolution" value="release" class="btn-action-success">Release to Seller</button>
+                                <button name="resolution" value="refund" class="btn-action-danger">Refund to Buyer</button>
+                            </div>
+                        </form>
+                    @endif
+                </div>
+            @endif
 
-        // Close on click outside
-        window.onclick = function(event) {
-            var modal = document.getElementById('paymentModal');
-            if (event.target == modal) {
-                closePaymentModal();
-            }
-        }
-    </script>
-    @endif
-
-
+        </div>
+    </div>
 </div>
 
+{{-- Payment Modal Logic (Preserved but styled) --}}
+@if(auth()->user()->hasRole('buyer') && $escrow->status === 'created')
+<div id="paymentModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center;">
+        <h3 style="font-size: 1.5rem; margin-bottom: 10px; font-weight: 700;">Scan to Pay</h3>
+        <p style="color: #64748b; margin-bottom: 20px;">Scan this QR code with your mobile app</p>
+        
+        <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; display: inline-block; margin-bottom: 20px;">
+             {!! QrCode::size(200)->generate(rtrim(config('app.url'), '/') . route('escrows.pay', $escrow, false)) !!}
+        </div>
+        
+        <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 20px;">
+            ${{ number_format($escrow->amount, 2) }}
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-direction: column;">
+            <form method="POST" action="/escrows/{{ $escrow->id }}/fund">
+                @csrf
+                <button type="submit" class="btn-action-primary">Confirm Payment</button>
+            </form>
+            <button onclick="closePaymentModal()" style="background: none; border: none; color: #64748b; cursor: pointer; padding: 10px;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openPaymentModal() { document.getElementById('paymentModal').style.display = 'flex'; }
+    function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
+    window.onclick = function(e) { if(e.target == document.getElementById('paymentModal')) closePaymentModal(); }
+</script>
+@endif
 @endsection

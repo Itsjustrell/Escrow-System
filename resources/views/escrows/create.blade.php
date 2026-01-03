@@ -4,36 +4,40 @@
 <style>
     .form-container {
         max-width: 700px;
-        margin: 0 auto;
-        padding: 40px 20px;
+        margin: 40px auto;
+    }
+
+    .glass-form {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid rgba(226, 232, 240, 0.8);
     }
 
     .form-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.15) 0%, transparent 60%),
+                    #1e293b;
         padding: 40px;
-        border-radius: 12px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        color: white;
         text-align: center;
     }
 
     .form-title {
-        font-size: 2.5rem;
-        font-weight: bold;
+        font-size: 2rem;
+        font-weight: 800;
         margin-bottom: 10px;
+        letter-spacing: -0.5px;
     }
 
     .form-subtitle {
-        font-size: 1.1rem;
-        opacity: 0.95;
+        color: #94a3b8;
+        font-size: 1.05rem;
     }
 
-    .form-card {
-        background: white;
+    .form-body {
         padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     .form-group {
@@ -42,234 +46,185 @@
 
     .form-label {
         display: block;
-        font-weight: 600;
-        color: #333;
+        font-weight: 700;
+        color: #334155;
         margin-bottom: 8px;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
-    .form-label-icon {
-        margin-right: 8px;
+    .input-wrapper {
+        position: relative;
     }
 
     .form-input,
     .form-select {
         width: 100%;
         padding: 14px 16px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
         font-size: 1rem;
-        transition: all 0.3s;
+        transition: all 0.2s;
         box-sizing: border-box;
+        background: #f8fafc;
+        color: #0f172a;
     }
 
     .form-input:focus,
     .form-select:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
     }
 
-    .form-input::placeholder {
-        color: #999;
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        font-weight: 600;
     }
 
-    .form-error {
-        color: #dc3545;
-        font-size: 0.9rem;
-        margin-top: 6px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
+    .has-icon .form-input {
+        padding-left: 40px;
     }
 
     .form-helper {
-        color: #666;
-        font-size: 0.9rem;
-        margin-top: 6px;
+        color: #64748b;
+        font-size: 0.85rem;
+        margin-top: 8px;
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
     }
 
     .btn-submit {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
         color: white;
         padding: 16px 40px;
         border: none;
-        border-radius: 8px;
-        font-weight: 600;
+        border-radius: 12px;
+        font-weight: 700;
         font-size: 1.1rem;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.2s;
         width: 100%;
         margin-top: 10px;
+        box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
     }
 
     .btn-submit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.5);
     }
 
     .btn-cancel {
-        background: white;
-        color: #667eea;
-        padding: 16px 40px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        width: 100%;
-        text-decoration: none;
-        display: inline-block;
+        display: block;
         text-align: center;
-        margin-top: 15px;
-        box-sizing: border-box;
+        margin-top: 20px;
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
     }
 
     .btn-cancel:hover {
-        border-color: #667eea;
-        color: #667eea;
+        color: #475569;
     }
 
-    .input-prefix {
-        position: relative;
-    }
-
-    .input-prefix .form-input {
-        padding-left: 35px;
-    }
-
-    .prefix-icon {
-        position: absolute;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #999;
-        font-weight: 600;
+    .error-msg {
+        color: #ef4444;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        font-weight: 500;
     }
 
     @media (max-width: 768px) {
         .form-container {
-            padding: 20px 15px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
-
-        .form-header {
-            padding: 30px 20px;
-        }
-
-        .form-title {
-            font-size: 1.8rem;
-        }
-
-        .form-card {
-            padding: 25px 20px;
+        
+        .form-body {
+            padding: 25px;
         }
     }
 </style>
 
 <div class="form-container">
-    <div class="form-header">
-        <h1 class="form-title">Create New Escrow</h1>
-        <p class="form-subtitle">Set up a secure transaction with a seller</p>
-    </div>
+    <div class="glass-form">
+        <div class="form-header">
+            <h1 class="form-title">Start New Transaction</h1>
+            <p class="form-subtitle">Create a secure escrow agreement</p>
+        </div>
 
-    <div class="form-card">
-        <form method="POST" action="{{ route('escrows.store') }}">
-            @csrf
+        <div class="form-body">
+            <form method="POST" action="{{ route('escrows.store') }}">
+                @csrf
 
-            <div class="form-group">
-                <label class="form-label">
-                    <span class="form-label-icon">📋</span>
-                    Transaction Title
-                </label>
-                <input type="text" 
-                       name="title" 
-                       class="form-input" 
-                       value="{{ old('title') }}"
-                       placeholder="e.g., Purchase MacBook Pro 2024">
-                @error('title') 
-                    <div class="form-error">
-                        ⚠️ {{ $message }}
-                    </div>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">
-                    <span class="form-label-icon">💰</span>
-                    Amount (USD)
-                </label>
-                <div class="input-prefix">
-                    <span class="prefix-icon">$</span>
-                    <input type="number" 
-                           name="amount" 
+                <div class="form-group">
+                    <label class="form-label">What are you buying/selling?</label>
+                    <input type="text" 
+                           name="title" 
                            class="form-input" 
-                           value="{{ old('amount') }}"
-                           placeholder="0.00"
-                           step="0.01"
-                           min="0.01">
+                           value="{{ old('title') }}"
+                           placeholder="e.g., iPhone 15 Pro Max 256GB">
+                    @error('title')<div class="error-msg">⚠️ {{ $message }}</div>@enderror
                 </div>
-                @error('amount') 
-                    <div class="form-error">
-                        ⚠️ {{ $message }}
-                    </div>
-                @enderror
-            </div>
 
-            <div class="form-group">
-                <label class="form-label">
-                    <span class="form-label-icon">⏰</span>
-                    Confirmation Window (days)
-                </label>
-                <input type="number" 
-                       name="confirmation_window" 
-                       class="form-input"
-                       min="1" 
-                       max="7"
-                       value="{{ old('confirmation_window', 3) }}"
-                       placeholder="3">
-                <div class="form-helper">
-                    ℹ️ Days you have to confirm delivery (1-7 days)
+                <div class="form-group">
+                    <label class="form-label">Transaction Amount</label>
+                    <div class="input-wrapper has-icon">
+                        <span class="input-icon">$</span>
+                        <input type="number" 
+                               name="amount" 
+                               class="form-input" 
+                               value="{{ old('amount') }}"
+                               placeholder="0.00"
+                               step="0.01"
+                               min="0.01">
+                    </div>
+                    @error('amount')<div class="error-msg">⚠️ {{ $message }}</div>@enderror
                 </div>
-                @error('confirmation_window') 
-                    <div class="form-error">
-                        ⚠️ {{ $message }}
+
+                <div class="form-group">
+                    <label class="form-label">Inspection Period (Days)</label>
+                    <input type="number" 
+                           name="confirmation_window" 
+                           class="form-input"
+                           min="1" 
+                           max="7"
+                           value="{{ old('confirmation_window', 3) }}">
+                    <div class="form-helper">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Time allowed for buyer to inspect goods (1-7 days)
                     </div>
-                @enderror
-            </div>
+                    @error('confirmation_window')<div class="error-msg">⚠️ {{ $message }}</div>@enderror
+                </div>
 
-            <div class="form-group">
-                <label class="form-label">
-                    <span class="form-label-icon">👤</span>
-                    Select Seller
-                </label>
-                <select name="seller_id" class="form-select">
-                    <option value="">-- Choose a Seller --</option>
-                    @foreach($sellers as $seller)
-                        <option value="{{ $seller->id }}" {{ old('seller_id') == $seller->id ? 'selected' : '' }}>
-                            {{ $seller->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('seller_id') 
-                    <div class="form-error">
-                        ⚠️ {{ $message }}
-                    </div>
-                @enderror
-            </div>
+                <div class="form-group">
+                    <label class="form-label">Select Seller</label>
+                    <select name="seller_id" class="form-select">
+                        <option value="">Choose a verified seller...</option>
+                        @foreach($sellers as $seller)
+                            <option value="{{ $seller->id }}" {{ old('seller_id') == $seller->id ? 'selected' : '' }}>
+                                {{ $seller->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('seller_id')<div class="error-msg">⚠️ {{ $message }}</div>@enderror
+                </div>
 
-            <button type="submit" class="btn-submit">
-                Create Escrow Transaction
-            </button>
+                <button type="submit" class="btn-submit">
+                    Create & Fund Escrow →
+                </button>
 
-            <a href="{{ route('dashboard') }}" class="btn-cancel">
-                Cancel
-            </a>
-        </form>
+                <a href="{{ route('dashboard') }}" class="btn-cancel">Cancel Transaction</a>
+            </form>
+        </div>
     </div>
 </div>
-
 @endsection
