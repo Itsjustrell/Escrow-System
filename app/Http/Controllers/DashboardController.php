@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Escrow;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -31,7 +32,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('admin')) {
-            return view('dashboards.admin');
+            return redirect()->route('admin.dashboard');
         }
 
         if ($user->hasRole('arbiter')) {
