@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Escrow extends Model
 {
     protected $fillable = [
-        'title','amount','status','confirmation_window',
-        'created_by','delivered_at','confirm_deadline'
+        'title',
+        'amount',
+        'status',
+        'confirmation_window',
+        'created_by',
+        'delivered_at',
+        'confirm_deadline'
     ];
 
     public function creator()
@@ -29,6 +34,20 @@ class Escrow extends Model
     public function transactions()
     {
         return $this->hasMany(EscrowTransaction::class);
+    }
+
+    public function buyer()
+    {
+        return $this->hasOne(EscrowParticipant::class)->where('role', 'buyer')
+            ->join('users', 'escrow_participants.user_id', '=', 'users.id')
+            ->select('users.*');
+    }
+
+    public function seller()
+    {
+        return $this->hasOne(EscrowParticipant::class)->where('role', 'seller')
+            ->join('users', 'escrow_participants.user_id', '=', 'users.id')
+            ->select('users.*');
     }
 
     public function dispute()
