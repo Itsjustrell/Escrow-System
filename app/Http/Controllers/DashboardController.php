@@ -32,7 +32,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('admin')) {
-            return redirect()->route('admin.dashboard');
+            return view('dashboards.admin');
         }
 
         if ($user->hasRole('arbiter')) {
