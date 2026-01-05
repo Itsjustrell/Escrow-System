@@ -32,7 +32,34 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('admin')) {
-            return view('dashboards.admin');
+            // Stats
+            $totalUsers = \App\Models\User::count();
+            $activeEscrows = Escrow::whereNotIn('status', ['completed', 'cancelled', 'refunded'])->count();
+            $totalEscrowAmount = Escrow::whereNotIn('status', ['created', 'completed', 'cancelled', 'refunded'])->sum('amount');
+
+            // Charts (Last 6 months)
+            $transactions = Escrow::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as date, count(*) as count')
+                ->groupBy('date')
+                ->orderBy('date', 'asc')
+                ->limit(6)
+                ->get();
+
+            $labels = $transactions->pluck('date');
+            $data = $transactions->pluck('count');
+
+            // Tables
+            $recentEscrows = Escrow::with(['participants.user'])->latest()->take(5)->get();
+            $recentUsers = \App\Models\User::latest()->take(5)->get();
+
+            return view('dashboards.admin', compact(
+                'totalUsers',
+                'activeEscrows',
+                'totalEscrowAmount',
+                'labels',
+                'data',
+                'recentEscrows',
+                'recentUsers'
+            ));
         }
 
         if ($user->hasRole('arbiter')) {
