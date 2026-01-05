@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EscrowController;
 use App\Http\Controllers\EscrowActionController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
