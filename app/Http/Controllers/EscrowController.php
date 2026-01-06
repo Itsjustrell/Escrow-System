@@ -37,12 +37,14 @@ class EscrowController extends Controller
     {
         $user = auth()->user();
 
-        // Authorization: hanya participant boleh lihat
+        // Authorization: hanya participant, admin, atau arbiter boleh lihat
         $isParticipant = $escrow->participants()
             ->where('user_id', $user->id)
             ->exists();
+            
+        $hasAccess = $isParticipant || $user->hasRole('admin') || $user->hasRole('arbiter');
 
-        abort_unless($isParticipant, 403);
+        abort_unless($hasAccess, 403);
 
         return view('escrows.show', compact('escrow'));
     }

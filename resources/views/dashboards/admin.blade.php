@@ -99,6 +99,14 @@
         <div class="banner-content">
             <h1>Admin Dashboard</h1>
             <p>Eagle Eye View: Monitoring system performance and transactions.</p>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <a href="{{ route('admin.users') }}" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid rgba(255,255,255,0.3);">
+                    Manage Users
+                </a>
+                <a href="{{ route('admin.escrows') }}" style="background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid rgba(255,255,255,0.3);">
+                    Manage Escrows
+                </a>
+            </div>
         </div>
     </div>
 

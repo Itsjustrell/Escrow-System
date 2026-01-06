@@ -79,5 +79,14 @@ Route::middleware('auth')->group(function () {
     )->name('escrows.dispute.evidence');
 });
 
+// ADMIN ROUTES
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+    
+    Route::get('/escrows', [AdminController::class, 'escrows'])->name('escrows');
+    Route::post('/escrows/{escrow}/cancel', [AdminController::class, 'cancelEscrow'])->name('escrows.cancel');
+});
+
 // Auth (Breeze)
 require __DIR__ . '/auth.php';
