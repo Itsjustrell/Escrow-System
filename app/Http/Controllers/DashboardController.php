@@ -37,15 +37,22 @@ class DashboardController extends Controller
             $activeEscrows = Escrow::whereNotIn('status', ['completed', 'cancelled', 'refunded'])->count();
             $totalEscrowAmount = Escrow::whereNotIn('status', ['created', 'completed', 'cancelled', 'refunded'])->sum('amount');
 
-            // Charts (Last 6 months)
-            $transactions = Escrow::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as date, count(*) as count')
-                ->groupBy('date')
-                ->orderBy('date', 'asc')
-                ->limit(6)
-                ->get();
+            // Charts (Last 6 months filled)
+            $labels = [];
+            $data = [];
+            $endDate = now();
+            $startDate = now()->subMonths(5);
 
-            $labels = $transactions->pluck('date');
-            $data = $transactions->pluck('count');
+            $transactions = Escrow::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as date, count(*) as count')
+                ->where('created_at', '>=', $startDate->startOfMonth())
+                ->groupBy('date')
+                ->pluck('count', 'date');
+
+            for ($i = 0; $i <= 5; $i++) {
+                $date = $startDate->copy()->addMonths($i)->format('Y-m');
+                $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $date)->format('M Y');
+                $data[] = $transactions[$date] ?? 0;
+            }
 
             // Tables
             $recentEscrows = Escrow::with(['participants.user'])->latest()->take(5)->get();

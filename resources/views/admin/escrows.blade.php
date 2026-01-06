@@ -35,7 +35,7 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         border: 1px solid #e2e8f0; overflow: hidden;
     }
-    .table-container { width: 100%; overflow-x: auto; }
+    .table-container { width: 100%; overflow-x: auto; max-height: 600px; overflow-y: auto; }
     table { width: 100%; border-collapse: collapse; }
     th {
         background: #f8fafc; padding: 16px 24px; text-align: left;

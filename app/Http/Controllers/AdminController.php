@@ -19,6 +19,14 @@ class AdminController extends Controller
             return back()->with('error', 'Cannot delete yourself.');
         }
 
+        // Prevent deleting if user has related escrows (integrity constraint)
+        $hasEscrows = \App\Models\Escrow::where('created_by', $user->id)->exists();
+        $isParticipant = \App\Models\EscrowParticipant::where('user_id', $user->id)->exists();
+
+        if ($hasEscrows || $isParticipant) {
+            return back()->with('error', 'Cannot delete user. They have associated transaction history.');
+        }
+
         $user->delete();
         return back()->with('success', 'User deleted successfully.');
     }
