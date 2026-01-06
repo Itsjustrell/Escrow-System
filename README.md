@@ -1,59 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Escrow System Project Guide
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Selamat datang di proyek **Escrow System**. Dokumen ini berisi panduan lengkap untuk menginstal dan menjalankan aplikasi di lingkungan lokal.
 
-## About Laravel
+## 📋 Prasyarat
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sebelum memulai, pastikan laptop/PC Anda sudah terinstall:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+*   **PHP** (versi 8.2 atau lebih baru)
+*   **Composer** (untuk manajemen package PHP)
+*   **Node.js & NPM** (untuk build asset frontend)
+*   **MySQL Database** (XAMPP / Laragon / Docker)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Cara Instalasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Ikuti langkah-langkah berikut untuk menjalankan project ini dari awal:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1.  **Clone Project** (Jika belum)
+    ```bash
+    git clone https://github.com/username/escrow-system.git
+    cd escrow-system
+    ```
 
-## Laravel Sponsors
+2.  **Install PHP Dependencies**
+    ```bash
+    composer install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3.  **Install Node.js  Dependencies**
+    ```bash
+    npm install
+    ```
 
-### Premium Partners
+4.  **Siapkan Environment**
+    Salin file `.env.example` ke `.env`:
+    ```bash
+    cp .env.example .env
+    ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5.  **Konfigurasi Database**
+    Buka file `.env` dan sesuaikan pengaturan database Anda:
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=new_escrow  # Pastikan database ini sudah dibuat di phpMyAdmin/MySQL
+    DB_USERNAME=root
+    DB_PASSWORD=            # Kosongkan jika pakai XAMPP default
+    ```
 
-## Contributing
+    *⚠️ Pastikan IP App untuk akses dari Network/HP:*
+    ```env
+    APP_URL=http://IP_LOCAL_LAPTOP_KAMU:8000
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6.  **Generate App Key**
+    ```bash
+    php artisan key:generate
+    ```
 
-## Code of Conduct
+7.  **Migrate & Seed Database**
+    Jalankan perintah ini untuk membuat tabel dan data pengguna bawaan (Admin, Buyer, Seller):
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🏃‍♂️ Cara Menjalankan Aplikasi
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Anda perlu menjalankan dua perintah terminal secara bersamaan (di tab/terminal terpisah):
 
-## License
+1.  **Jalankan Backend Server (Laravel)**
+    Agar bisa diakses dari HP/Jaringan luar, gunakan host 0.0.0.0:
+    ```bash
+    php artisan serve --host=0.0.0.0 --port=8000
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2.  **Jalankan Frontend Build (Vite)**
+    ```bash
+    npm run dev
+    ```
+
+Sekarang aplikasi bisa diakses melalui:
+*   **Laptop:** `http://localhost:8000`
+*   **HP / Network:** `http://IP_LAPTOP_KAMU:8000`
+
+---
+
+## 🔑 Akun Login Default
+
+Gunakan kredensial berikut untuk masuk dan menguji berbagai role:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@test.com` | `password` |
+| **Buyer** | `buyer@test.com` | `password` |
+| **Seller** | `seller@test.com` | `password` |
+| *Arbiter* | `arbiter@test.com` | `password` |
+
+---
+
+## 🛠 Fitur Utama
+
+*   **Role Management**: Logika berbeda untuk Admin, Buyer, Seller, dan Arbiter.
+*   **Escrow Flow**: Created -> Funded -> Shipping -> Delivered -> Completed.
+*   **Admin Panel**:
+    *   Dashboard Analisis (Chart 6 bulan terakhir).
+    *   Manage Users (Hapus user dengan validasi integritas).
+    *   Manage Escrows (Force cancel dengan proteksi status).
+    *   **Export Data CSV**.
+*   **Fitur Unik**:
+    *   QR Code Payment (Otomatis menyesuaikan IP).
+    *   Bukti Upload saat Dispute.
+
+---
+
+Jika ada kendala "Vite manifest not found" atau tampilan berantakan, pastikan `npm run dev` sedang berjalan.
+Selamat mencoba! 🚀
