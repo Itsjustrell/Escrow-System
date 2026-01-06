@@ -31,6 +31,43 @@ class AdminController extends Controller
         return back()->with('success', 'User deleted successfully.');
     }
 
+    public function exportEscrows()
+    {
+        $fileName = 'escrows_export_' . date('Y-m-d_H-i') . '.csv';
+        $escrows = \App\Models\Escrow::with(['buyer', 'seller'])->latest()->get();
+
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = ['ID', 'Title', 'Amount', 'Status', 'Buyer', 'Seller', 'Created At'];
+
+        $callback = function() use($escrows, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($escrows as $escrow) {
+                $row['ID']  = $escrow->id;
+                $row['Title']    = $escrow->title;
+                $row['Amount']    = $escrow->amount;
+                $row['Status']  = $escrow->status;
+                $row['Buyer']  = $escrow->buyer->name ?? 'N/A';
+                $row['Seller']  = $escrow->seller->name ?? 'N/A';
+                $row['Created At']  = $escrow->created_at;
+
+                fputcsv($file, array($row['ID'], $row['Title'], $row['Amount'], $row['Status'], $row['Buyer'], $row['Seller'], $row['Created At']));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function escrows()
     {
         $escrows = \App\Models\Escrow::with(['buyer', 'seller', 'statusLogs'])

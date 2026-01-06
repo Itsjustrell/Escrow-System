@@ -84,6 +84,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
     
+    Route::get('/export/escrows', [AdminController::class, 'exportEscrows'])->name('export.escrows');
     Route::get('/escrows', [AdminController::class, 'escrows'])->name('escrows');
     Route::post('/escrows/{escrow}/cancel', [AdminController::class, 'cancelEscrow'])->name('escrows.cancel');
 });
