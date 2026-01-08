@@ -122,7 +122,7 @@
         <div class="stat-card accent-green">
             <div class="stat-label">Funds in Escrow</div>
             <div class="stat-value" style="color: #15803d;">
-                Rp {{ number_format($totalEscrowAmount, 0, ',', '.') }}
+                $ {{ number_format($totalEscrowAmount, 0, ',', '.') }}
             </div>
         </div>
     </div>
@@ -225,7 +225,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Monthly Transactions',
+                    label: 'Daily Transactions',
                     data: data,
                     borderColor: '#4f46e5', // Indigo color matching theme
                     backgroundColor: 'rgba(79, 70, 229, 0.1)',

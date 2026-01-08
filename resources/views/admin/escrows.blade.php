@@ -123,7 +123,7 @@
                         <td>{{ $escrow->buyer->name ?? 'N/A' }}</td>
                         <td>{{ $escrow->seller->name ?? 'N/A' }}</td>
                         <td>
-                            <div style="font-weight: 700; color: #0f172a;">Rp {{ number_format($escrow->amount) }}</div>
+                            <div style="font-weight: 700; color: #0f172a;">$ {{ number_format($escrow->amount) }}</div>
                         </td>
                         <td>
                             <span class="status-badge status-{{ strtolower($escrow->status) }}">
