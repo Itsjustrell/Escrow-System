@@ -9,6 +9,17 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Role Selection -->
+        <div class="mt-4">
+            <x-input-label for="role" :value="__('I want to register as:')" />
+            <select id="role" name="role" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2);" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="buyer" style="color: black;" {{ old('role') == 'buyer' ? 'selected' : '' }}>Buyer (I want to buy services)</option>
+                <option value="seller" style="color: black;" {{ old('role') == 'seller' ? 'selected' : '' }}>Seller (I want to sell services)</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
