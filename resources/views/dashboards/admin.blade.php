@@ -163,7 +163,7 @@
                                     <div style="font-size: 0.9rem; font-weight: 600;">B: {{ $escrow->buyer->name ?? 'N/A' }}</div>
                                     <div style="font-size: 0.9rem; color: #64748b;">S: {{ $escrow->seller->name ?? 'N/A' }}</div>
                                 </td>
-                                <td style="font-weight: 700;">Rp {{ number_format($escrow->amount) }}</td>
+                                <td style="font-weight: 700;">$ {{ number_format($escrow->amount) }}</td>
                                 <td>
                                     <span class="status-badge status-{{ strtolower($escrow->status) }}">
                                         {{ $escrow->status }}

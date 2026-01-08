@@ -28,6 +28,20 @@ class ArbiterController extends Controller
     }
 
     /**
+     * Show history of resolved disputes.
+     */
+    public function history()
+    {
+        $escrows = Escrow::whereIn('status', ['resolved', 'refunded', 'released'])
+            ->whereHas('dispute') // Only show ones that had a dispute
+            ->with(['buyer', 'seller', 'dispute'])
+            ->latest()
+            ->paginate(10);
+
+        return view('arbiter.history', compact('escrows'));
+    }
+
+    /**
      * Show details of a specific disputed escrow.
      */
     public function show(Escrow $escrow)

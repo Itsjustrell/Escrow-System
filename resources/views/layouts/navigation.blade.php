@@ -20,6 +20,9 @@
                         <x-nav-link :href="route('arbiter.dashboard')" :active="request()->routeIs('arbiter.dashboard')">
                             {{ __('Arbiter Dashboard') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('arbiter.history')" :active="request()->routeIs('arbiter.history')">
+                            {{ __('History') }}
+                        </x-nav-link>
                     @endif
                     
                     @if(Auth::user()->hasRole('admin'))

@@ -84,6 +84,7 @@ Route::middleware('auth')->group(function () {
 // ARBITER ROUTES
 Route::middleware(['auth', 'role:arbiter'])->prefix('arbiter')->name('arbiter.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\ArbiterController::class, 'index'])->name('dashboard');
+    Route::get('/history', [App\Http\Controllers\ArbiterController::class, 'history'])->name('history');
     Route::get('/disputes/{escrow}', [App\Http\Controllers\ArbiterController::class, 'show'])->name('show');
     Route::post('/disputes/{escrow}/resolve', [App\Http\Controllers\ArbiterController::class, 'resolve'])->name('resolve');
 });
