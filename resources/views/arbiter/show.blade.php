@@ -52,10 +52,10 @@
                         @if($escrow->dispute->evidences->count() > 0)
                             <div class="space-y-4">
                                 @foreach($escrow->dispute->evidences as $evidence)
-                                    <div class="flex {{ $evidence->uploaded_by === $escrow->buyer->id ? 'justify-start' : 'justify-end' }}">
-                                        <div class="max-w-lg {{ $evidence->uploaded_by === $escrow->buyer->id ? 'bg-blue-50' : 'bg-green-50' }} rounded-lg p-4 shadow-sm border">
-                                            <p class="text-xs font-bold mb-1 {{ $evidence->uploaded_by === $escrow->buyer->id ? 'text-blue-600' : 'text-green-600' }}">
-                                                @if($evidence->uploaded_by === $escrow->buyer->id) Buyer @elseif($evidence->uploaded_by === $escrow->seller->id) Seller @else User @endif
+                                    <div class="flex {{ $evidence->uploaded_by === ($escrow->buyer?->id) ? 'justify-start' : 'justify-end' }}">
+                                        <div class="max-w-lg {{ $evidence->uploaded_by === ($escrow->buyer?->id) ? 'bg-blue-50' : 'bg-green-50' }} rounded-lg p-4 shadow-sm border">
+                                            <p class="text-xs font-bold mb-1 {{ $evidence->uploaded_by === ($escrow->buyer?->id) ? 'text-blue-600' : 'text-green-600' }}">
+                                                @if($evidence->uploaded_by === ($escrow->buyer?->id)) Buyer @elseif($evidence->uploaded_by === ($escrow->seller?->id)) Seller @else User @endif
                                             </p>
                                             
                                             @if($evidence->description)
