@@ -276,7 +276,18 @@
 
 @php
     $steps = ['created', 'funded', 'shipping', 'delivered', 'completed'];
-    $currentStepIndex = array_search($escrow->status === 'disputed' ? 'delivered' : $escrow->status, $steps);
+    $effectiveStatus = match($escrow->status) {
+        'disputed' => 'delivered',
+        'released' => 'completed',
+        default => $escrow->status,
+    };
+    $currentStepIndex = array_search($effectiveStatus, $steps);
+    // If status not found (e.g. refunded), defaulting to 0 or handling it is safer, but strictly for released->completed fix:
+    if ($currentStepIndex === false && $escrow->status === 'refunded') { 
+         // Optional: handle refunded if needed, but for now focus on user request
+         // assuming refunded might also want to show completed or something else. 
+         // But sticking to the specific request for released.
+    }
     $progressWidth = max(0, min(100, $currentStepIndex * 25));
 @endphp
 

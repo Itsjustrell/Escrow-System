@@ -29,7 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/escrows', [EscrowController::class, 'index'])
         ->name('escrows.index');
 
-    // ⚠️ STATIC HARUS DI ATAS PARAMETER
     Route::get('/escrows/create', [EscrowController::class, 'create'])
         ->name('escrows.create');
 
