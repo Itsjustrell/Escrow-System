@@ -10,7 +10,9 @@ class DisputeEvidence extends Model
     
     protected $fillable = [
         'escrow_dispute_id',
+        'uploaded_by',
         'file_path',
+        'description',
     ];
 
     public function dispute()

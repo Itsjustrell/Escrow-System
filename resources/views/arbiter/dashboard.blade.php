@@ -8,6 +8,22 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="text-gray-500 text-sm font-medium">Pending Reviews</div>
+                    <div class="mt-2 text-3xl font-bold text-indigo-600">{{ $stats['pending'] }}</div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="text-gray-500 text-sm font-medium">Resolved Cases</div>
+                    <div class="mt-2 text-3xl font-bold text-green-600">{{ $stats['resolved'] }}</div>
+                </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="text-gray-500 text-sm font-medium">Total Disputes</div>
+                    <div class="mt-2 text-3xl font-bold text-gray-800">{{ $stats['total'] }}</div>
+                </div>
+            </div>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-bold mb-4">Active Disputes</h3>

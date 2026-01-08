@@ -9,18 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class ArbiterController extends Controller
 {
-    /**
-     * Show list of disputes assigned to arbiter or all disputes.
-     */
     public function index()
     {
-        // For now, arbiter sees all disputed escrows
+        // Stats
+        $stats = [
+            'total' => Escrow::whereIn('status', ['disputed', 'resolved', 'refunded', 'released'])->count(),
+            'pending' => Escrow::where('status', 'disputed')->count(),
+            'resolved' => Escrow::whereIn('status', ['resolved', 'refunded', 'released'])->count(),
+        ];
+
+        // List active disputes
         $escrows = Escrow::where('status', 'disputed')
             ->with(['buyer', 'seller', 'dispute'])
             ->latest()
             ->paginate(10);
 
-        return view('arbiter.dashboard', compact('escrows'));
+        return view('arbiter.dashboard', compact('escrows', 'stats'));
     }
 
     /**

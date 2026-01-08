@@ -70,7 +70,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('arbiter')) {
-            return view('dashboards.arbiter');
+            return redirect()->route('arbiter.dashboard');
         }
 
         abort(403);
