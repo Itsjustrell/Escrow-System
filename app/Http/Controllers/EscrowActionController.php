@@ -157,7 +157,9 @@ class EscrowActionController extends Controller
 
         DisputeEvidence::create([
             'escrow_dispute_id' => $escrow->dispute->id,
-            'file_path' => $path,
+            'uploaded_by'       => auth()->id(),
+            'file_path'         => $path,
+            'description'       => $request->input('description'),
         ]);
 
         return back();

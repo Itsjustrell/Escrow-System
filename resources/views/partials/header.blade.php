@@ -169,6 +169,8 @@
             <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
             
             @auth
+
+
                 <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
                 
                 <form method="POST" action="{{ route('logout') }}" style="margin: 0; width: 100%;">

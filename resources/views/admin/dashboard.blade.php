@@ -122,7 +122,7 @@
         <div class="stat-card accent-green">
             <div class="stat-label">Funds in Escrow</div>
             <div class="stat-value" style="color: #15803d;">
-                Rp {{ number_format($totalEscrowAmount, 0, ',', '.') }}
+                $ {{ number_format($totalEscrowAmount, 0, ',', '.') }}
             </div>
         </div>
     </div>
@@ -163,7 +163,7 @@
                                     <div style="font-size: 0.9rem; font-weight: 600;">B: {{ $escrow->buyer->name ?? 'N/A' }}</div>
                                     <div style="font-size: 0.9rem; color: #64748b;">S: {{ $escrow->seller->name ?? 'N/A' }}</div>
                                 </td>
-                                <td style="font-weight: 700;">Rp {{ number_format($escrow->amount) }}</td>
+                                <td style="font-weight: 700;">$ {{ number_format($escrow->amount) }}</td>
                                 <td>
                                     <span class="status-badge status-{{ strtolower($escrow->status) }}">
                                         {{ $escrow->status }}
@@ -225,7 +225,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Monthly Transactions',
+                    label: 'Daily Transactions',
                     data: data,
                     borderColor: '#4f46e5', // Indigo color matching theme
                     backgroundColor: 'rgba(79, 70, 229, 0.1)',

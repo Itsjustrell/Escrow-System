@@ -15,6 +15,21 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if(Auth::user()->hasRole('arbiter'))
+                        <x-nav-link :href="route('arbiter.dashboard')" :active="request()->routeIs('arbiter.dashboard')">
+                            {{ __('Arbiter Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('arbiter.history')" :active="request()->routeIs('arbiter.history')">
+                            {{ __('History') }}
+                        </x-nav-link>
+                    @endif
+                    
+                    @if(Auth::user()->hasRole('admin'))
+                        <x-nav-link :href="route('admin.escrows')" :active="request()->routeIs('admin.escrows')">
+                            {{ __('Admin Panel') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

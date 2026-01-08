@@ -37,20 +37,20 @@ class DashboardController extends Controller
             $activeEscrows = Escrow::whereNotIn('status', ['completed', 'cancelled', 'refunded'])->count();
             $totalEscrowAmount = Escrow::whereNotIn('status', ['created', 'completed', 'cancelled', 'refunded'])->sum('amount');
 
-            // Charts (Last 6 months filled)
+            // Charts (Last 30 days filled)
             $labels = [];
             $data = [];
             $endDate = now();
-            $startDate = now()->subMonths(5);
+            $startDate = now()->subDays(29);
 
-            $transactions = Escrow::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as date, count(*) as count')
-                ->where('created_at', '>=', $startDate->startOfMonth())
+            $transactions = Escrow::selectRaw('DATE_FORMAT(created_at, "%Y-%m-%d") as date, count(*) as count')
+                ->where('created_at', '>=', $startDate->startOfDay())
                 ->groupBy('date')
                 ->pluck('count', 'date');
 
-            for ($i = 0; $i <= 5; $i++) {
-                $date = $startDate->copy()->addMonths($i)->format('Y-m');
-                $labels[] = \Carbon\Carbon::createFromFormat('Y-m', $date)->format('M Y');
+            for ($i = 0; $i <= 29; $i++) {
+                $date = $startDate->copy()->addDays($i)->format('Y-m-d');
+                $labels[] = \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format('M d');
                 $data[] = $transactions[$date] ?? 0;
             }
 
@@ -58,7 +58,7 @@ class DashboardController extends Controller
             $recentEscrows = Escrow::with(['participants.user'])->latest()->take(5)->get();
             $recentUsers = \App\Models\User::latest()->take(5)->get();
 
-            return view('dashboards.admin', compact(
+            return view('admin.dashboard', compact(
                 'totalUsers',
                 'activeEscrows',
                 'totalEscrowAmount',
@@ -70,7 +70,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('arbiter')) {
-            return view('dashboards.arbiter');
+            return redirect()->route('arbiter.dashboard');
         }
 
         abort(403);

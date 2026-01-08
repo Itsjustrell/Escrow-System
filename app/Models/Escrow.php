@@ -40,14 +40,14 @@ class Escrow extends Model
     {
         return $this->hasOne(EscrowParticipant::class)->where('role', 'buyer')
             ->join('users', 'escrow_participants.user_id', '=', 'users.id')
-            ->select('users.*');
+            ->select('users.*', 'escrow_participants.escrow_id');
     }
 
     public function seller()
     {
         return $this->hasOne(EscrowParticipant::class)->where('role', 'seller')
             ->join('users', 'escrow_participants.user_id', '=', 'users.id')
-            ->select('users.*');
+            ->select('users.*', 'escrow_participants.escrow_id');
     }
 
     public function dispute()

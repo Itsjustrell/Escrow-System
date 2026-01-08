@@ -19,7 +19,7 @@ Ikuti langkah-langkah berikut untuk menjalankan project ini dari awal:
 
 1.  **Clone Project** (Jika belum)
     ```bash
-    git clone https://github.com/username/escrow-system.git
+    git clone https://github.com/Itsjustrell/Escrow-System.git
     cd escrow-system
     ```
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Transaction Escrow System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0; background: #f8fafc; font-family: 'Inter', sans-serif;">
 
