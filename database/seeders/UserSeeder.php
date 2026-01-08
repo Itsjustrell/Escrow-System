@@ -42,5 +42,16 @@ class UserSeeder extends Seeder
         $admin->roles()->attach(
             Role::where('name', 'admin')->first()
         );
+
+        // 4. BUAT ARBITER
+        $arbiter = User::factory()->create([
+            'name' => 'Arbiter Account',
+            'email' => 'arbiter@test.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $arbiter->roles()->attach(
+            Role::where('name', 'arbiter')->first()
+        );
     }
 }

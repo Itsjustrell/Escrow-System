@@ -79,6 +79,15 @@ Route::middleware('auth')->group(function () {
     )->name('escrows.dispute.evidence');
 });
 
+
+
+// ARBITER ROUTES
+Route::middleware(['auth', 'role:arbiter'])->prefix('arbiter')->name('arbiter.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\ArbiterController::class, 'index'])->name('dashboard');
+    Route::get('/disputes/{escrow}', [App\Http\Controllers\ArbiterController::class, 'show'])->name('show');
+    Route::post('/disputes/{escrow}/resolve', [App\Http\Controllers\ArbiterController::class, 'resolve'])->name('resolve');
+});
+
 // ADMIN ROUTES
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/users', [AdminController::class, 'users'])->name('users');
