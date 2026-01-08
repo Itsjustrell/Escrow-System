@@ -222,12 +222,12 @@
     </div>
 
     <!-- Feature 5: Export/Import -->
-    <div class="feature-card" style="opacity: 0.7;">
-        <span class="badge-soon">Coming Soon</span>
+    <div class="feature-card">
+        <span class="badge-check">✓ Live</span>
         <div class="feature-icon">📊</div>
-        <h3 class="feature-title">Data Export/Import</h3>
+        <h3 class="feature-title">Data Export</h3>
         <p class="feature-desc">
-            Seamlessly migrate your transaction history. Export to CSV/PDF for accounting or batch import new orders instantly.
+            Admins can now download complete transaction histories in CSV format for offline analysis and reporting.
         </p>
     </div>
 
