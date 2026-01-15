@@ -14,9 +14,36 @@ class AdminController extends Controller
         return view('admin.users', compact('users'));
     }
 
+    public function createUser()
+    {
+        $roles = \App\Models\Role::all();
+        return view('admin.users.create', compact('roles'));
+    }
+
+    public function storeUser(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required|exists:roles,id',
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $user->roles()->attach($validated['role']);
+
+        return redirect()->route('admin.users')->with('success', 'User created successfully.');
+    }
+
     public function editUser(\App\Models\User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = \App\Models\Role::all();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function updateUser(Request $request, \App\Models\User $user)
@@ -25,6 +52,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required|exists:roles,id',
         ]);
 
         $user->name = $validated['name'];
@@ -35,6 +63,9 @@ class AdminController extends Controller
         }
 
         $user->save();
+
+        // Sync roles (assuming single role per user for simple drop-down, but sync works for array too)
+        $user->roles()->sync([$validated['role']]);
 
         return redirect()->route('admin.users')->with('success', 'User updated successfully.');
     }

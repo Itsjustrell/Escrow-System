@@ -70,6 +70,11 @@
             <a href="{{ route('dashboard') }}" class="back-link">&larr; Back to Dashboard</a>
             <h1>User Management</h1>
             <p>Manage all registered users and their roles.</p>
+            <div style="margin-top: 15px;">
+                <a href="{{ route('admin.users.create') }}" class="btn-view" style="color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    Add New User ➕
+                </a>
+            </div>
         </div>
     </div>
 
