@@ -132,6 +132,7 @@
                         </td>
                         <td style="text-align: right;">
                             <a href="{{ route('escrows.show', $escrow) }}" class="btn-view">View Details</a>
+                            <a href="{{ route('admin.escrows.edit', $escrow) }}" class="btn-view" style="color: #059669;">Edit</a>
                             
                             @if(!in_array($escrow->status, ['completed', 'cancelled', 'refunded', 'released', 'disputed']))
                                 <form action="{{ route('admin.escrows.cancel', $escrow) }}" method="POST" onsubmit="return confirm('ADMIN OVERRIDE: Are you sure you want to forcibly cancel this escrow? This cannot be undone.');" style="display: inline;">

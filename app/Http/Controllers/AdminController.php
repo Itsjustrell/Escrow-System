@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class AdminController extends Controller
 {
@@ -10,6 +12,31 @@ class AdminController extends Controller
     {
         $users = \App\Models\User::with('roles')->latest()->paginate(10);
         return view('admin.users', compact('users'));
+    }
+
+    public function editUser(\App\Models\User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function updateUser(Request $request, \App\Models\User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.users')->with('success', 'User updated successfully.');
     }
 
     public function destroyUser(\App\Models\User $user)
@@ -75,6 +102,29 @@ class AdminController extends Controller
             ->paginate(10);
             
         return view('admin.escrows', compact('escrows'));
+    }
+
+    public function editEscrow(\App\Models\Escrow $escrow)
+    {
+        return view('admin.escrows.edit', compact('escrow'));
+    }
+
+    public function updateEscrow(Request $request, \App\Models\Escrow $escrow)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            // 'status' => 'required|in:created,funded,shipping,delivered,completed,cancelled,disputed,released'
+        ]);
+
+        $escrow->update([
+            'title' => $validated['title'],
+            'amount' => $validated['amount'],
+            'description' => $validated['description'],
+        ]);
+
+        return redirect()->route('admin.escrows')->with('success', 'Escrow updated successfully.');
     }
 
     public function cancelEscrow(\App\Models\Escrow $escrow)

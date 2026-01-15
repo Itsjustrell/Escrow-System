@@ -119,6 +119,7 @@
                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                         <td style="text-align: right;">
                             @if($user->id !== auth()->id())
+                                <a href="{{ route('admin.users.edit', $user) }}" style="color: #4f46e5; font-weight: 600; text-decoration: none; margin-right: 15px;">Edit</a>
                                 <form action="{{ route('admin.users.destroy', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');" style="display: inline;">
                                     @csrf
                                     @method('DELETE')

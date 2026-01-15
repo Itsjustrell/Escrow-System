@@ -91,10 +91,14 @@ Route::middleware(['auth', 'role:arbiter'])->prefix('arbiter')->name('arbiter.')
 // ADMIN ROUTES
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
     
     Route::get('/export/escrows', [AdminController::class, 'exportEscrows'])->name('export.escrows');
     Route::get('/escrows', [AdminController::class, 'escrows'])->name('escrows');
+    Route::get('/escrows/{escrow}/edit', [AdminController::class, 'editEscrow'])->name('escrows.edit');
+    Route::put('/escrows/{escrow}', [AdminController::class, 'updateEscrow'])->name('escrows.update');
     Route::post('/escrows/{escrow}/cancel', [AdminController::class, 'cancelEscrow'])->name('escrows.cancel');
 });
 
