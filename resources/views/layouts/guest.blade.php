@@ -35,18 +35,26 @@
             /* Overriding default input styles for dark theme compatibility */
             input[type="email"],
             input[type="password"],
-            input[type="text"] {
-                background: rgba(0, 0, 0, 0.3);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                color: white;
+            input[type="text"],
+            select {
+                background: rgba(0, 0, 0, 0.3) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                color: white !important;
                 border-radius: 8px;
+            }
+
+            option {
+                background-color: #1f2937;
+                color: white;
             }
             
             input[type="email"]:focus,
             input[type="password"]:focus,
-            input[type="text"]:focus {
-                border-color: #6366f1;
-                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+            input[type="text"]:focus,
+            select:focus {
+                border-color: #6366f1 !important;
+                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3) !important;
+                outline: none;
             }
 
             label {
