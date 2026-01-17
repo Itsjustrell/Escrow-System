@@ -76,7 +76,10 @@
             <a href="{{ route('dashboard') }}" class="back-link">&larr; Back to Dashboard</a>
             <h1>Escrow Management</h1>
             <p>Monitor and manage all escrow transactions.</p>
-            <div style="margin-top: 15px;">
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <a href="{{ route('admin.escrows.create') }}" style="background: white; color: #4f46e5; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    + Create New Escrow
+                </a>
                 <a href="{{ route('admin.export.escrows') }}" class="btn-view" style="color: white; border: 1px solid rgba(255,255,255,0.3); padding: 8px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                     Download CSV Report 📥
                 </a>
@@ -137,9 +140,15 @@
                             @if(!in_array($escrow->status, ['completed', 'cancelled', 'refunded', 'released', 'disputed']))
                                 <form action="{{ route('admin.escrows.cancel', $escrow) }}" method="POST" onsubmit="return confirm('ADMIN OVERRIDE: Are you sure you want to forcibly cancel this escrow? This cannot be undone.');" style="display: inline;">
                                     @csrf
-                                    <button type="submit" class="btn-cancel">Force Cancel</button>
+                                    <button type="submit" class="btn-cancel" style="margin-right: 15px;" title="Cancel Transaction">Cancel</button>
                                 </form>
                             @endif
+
+                             <form action="{{ route('admin.escrows.destroy', $escrow) }}" method="POST" onsubmit="return confirm('PERMANENT DELETE: Are you sure? This will remove all records of this transaction from the database.');" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-cancel" style="color: #991b1b;" title="Delete Permanently">🗑️</button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Enums\EscrowStatus;
 
 class AdminController extends Controller
 {
@@ -133,6 +134,69 @@ class AdminController extends Controller
             ->paginate(10);
             
         return view('admin.escrows', compact('escrows'));
+    }
+
+    public function createEscrow()
+    {
+        $buyers = \App\Models\User::whereHas('roles', function($q) {
+            $q->where('name', 'buyer');
+        })->get();
+        
+        $sellers = \App\Models\User::whereHas('roles', function($q) {
+            $q->where('name', 'seller');
+        })->get();
+
+        return view('admin.escrows.create', compact('buyers', 'sellers'));
+    }
+
+    public function storeEscrow(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:1',
+            'confirmation_window' => 'required|integer|min:1|max:30',
+            'buyer_id' => 'required|exists:users,id',
+            'seller_id' => 'required|exists:users,id|different:buyer_id',
+            'description' => 'nullable|string',
+        ]);
+
+        $escrow = \App\Models\Escrow::create([
+            'title' => $validated['title'],
+            'amount' => $validated['amount'],
+            'description' => $validated['description'] ?? null,
+            'status' => EscrowStatus::CREATED->value,
+            'confirmation_window' => $validated['confirmation_window'],
+            'created_by' => auth()->id(),
+        ]);
+
+        $escrow->participants()->createMany([
+            [
+                'user_id' => $validated['buyer_id'],
+                'role' => 'buyer',
+            ],
+            [
+                'user_id' => $validated['seller_id'],
+                'role' => 'seller',
+            ],
+        ]);
+
+        return redirect()->route('admin.escrows')->with('success', 'Escrow created successfully by Admin.');
+    }
+
+    public function destroyEscrow(\App\Models\Escrow $escrow)
+    {
+        // Optional: Only allow delete if not completed/disputed? Or admin power allows all?
+        // Let's allow all but maybe log it? For now simple delete.
+        
+        // Clean up related records if foreign keys don't cascade (usually they should, but to be safe)
+        $escrow->participants()->delete();
+        $escrow->statusLogs()->delete();
+        // disputes?
+        if($escrow->dispute) $escrow->dispute->delete();
+
+        $escrow->delete();
+        
+        return back()->with('success', 'Escrow deleted permanently.');
     }
 
     public function editEscrow(\App\Models\Escrow $escrow)
