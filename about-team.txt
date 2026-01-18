@@ -1,0 +1,15 @@
+Project Name: Transaction Escrow Systemz
+
+Team:
+1. Muhammad Farel Firdaus (152024061) (Leader)
+2. Hamizan Ihsan (152024063) (Member)
+3. Farrel Gavin Azarya Fadillillah (152024016) (Member)
+
+Muhammad Farel Firdaus mengerjakan role buyer dan seller
+Hamizan Ihsan mengerjakan role arbiter
+Farrel Gavin Azarya Fadillillah mengerjakan role admin
+
+Akun GitHub:
+Muhammad Farel Firdaus: @Solthera, @Itsjustrell (Sebagai repository untuk menyimpan file code project)
+Hamizan Ihsan: @hmizan26 
+Farrel Gavin Azarya Fadillillah: @synystergates777

@@ -19,7 +19,6 @@ class RoleMiddleware
         }
 
         // 2. Cek apakah user punya role yang diminta
-        // Kita gunakan fungsi 'hasRole' yang ada di model User.php Anda
         if (!$request->user()->hasRole($role)) {
             // Jika tidak punya akses, tampilkan error 403
             abort(403, 'Unauthorized. Anda tidak memiliki akses sebagai ' . $role);
